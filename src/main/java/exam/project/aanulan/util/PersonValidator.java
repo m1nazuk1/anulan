@@ -32,7 +32,7 @@ public class PersonValidator implements Validator {
         try {
             personDetailsService.loadUserByUsername(person.getUsername());
         } catch (UsernameNotFoundException ignored) {
-            return; // все ок, пользователь не найден
+            return;
         }
 
         errors.rejectValue("username", "", "Человек с таким именем пользователя уже существует");

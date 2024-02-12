@@ -32,4 +32,13 @@ public class PersonDetailsService implements UserDetailsService {
 
         return new PersonDetails(person.get());
     }
+
+
+    public Person loadPersonByUsername(String s){
+        Optional<Person> person = peopleRepository.findByUsername(s);
+        if (person.isEmpty())
+            throw new UsernameNotFoundException("User not found");
+
+        return person.get();
+    }
 }

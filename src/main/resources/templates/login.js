@@ -14,6 +14,7 @@ document.getElementById('loginForm').addEventListener('submit', function(e) {
     })
         .then(response => response.json())
         .then(data => {
+            console.log(data)
             if (data.message) {
                 errorMessage.textContent = data.message;
             } else {
@@ -22,4 +23,10 @@ document.getElementById('loginForm').addEventListener('submit', function(e) {
             }
         })
         .catch(error => console.error('Ошибка:', error));
+});
+
+document.getElementById('togglePassword').addEventListener('click', function(e) {
+    const password = document.getElementById('password');
+    const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+    password.setAttribute('type', type);
 });

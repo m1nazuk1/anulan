@@ -24,13 +24,14 @@ public class JWTUtil {
         Date expirationDate = new Date(System.currentTimeMillis() + 3600000); // 1 hour
 
         return JWT.create()
-                .withSubject(username) // Используем username как subject
+                .withSubject(username)
                 .withIssuedAt(new Date())
                 .withExpiresAt(expirationDate)
                 .sign(Algorithm.HMAC256(secret));
     }
 
     public String validateTokenAndRetrieveClaim(String token) {
+        System.out.println(token);
         try {
             Algorithm algorithm = Algorithm.HMAC256(secret);
             JWTVerifier verifier = JWT.require(algorithm).build();

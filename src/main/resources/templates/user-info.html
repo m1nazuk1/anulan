@@ -3,12 +3,24 @@
 <head>
   <meta charset="UTF-8">
   <title>Информация о пользователе</title>
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="user-info.css">
 </head>
 <body>
+<div class="header">
+  <h1 class="brand-name">anulan</h1>
+  <nav class="navigation">
+    <button onclick="window.location.href='messages.html';">Сообщения</button>
+    <button onclick="window.location.href='users.html';">Пользователи</button>
+    <button onclick="window.location.href='user-info.html';">Моя страница</button>
+  </nav>
+</div>
 <div class="user-info">
-  <h2>Информация о пользователе</h2>
+  <h2>Личная информация</h2>
   <p id="userInfo"></p>
+</div>
+<button id="editUserButton" class="edit-user-button">Редактировать профиль</button>
+<div class="logout-container">
+  <button id="logoutButton" class="logout-button">Выйти из аккаунта</button>
 </div>
 <script src="user-info.js"></script>
 </body>

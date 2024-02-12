@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Авторизация</title>
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="login.css">
 </head>
 <body>
 <div class="form-container">
@@ -15,9 +15,13 @@
     </div>
     <div class="form-group">
       <label for="password">Пароль:</label>
-      <input type="password" id="password" name="password" required>
+      <div class="password-container">
+        <input type="password" id="password" name="password" required>
+        <span id="togglePassword" class="toggle-password">&#128065;</span>
+      </div>
     </div>
     <button type="submit">Войти</button>
+    <p class="registration-invite">Если у вас еще нет аккаунта, то можете <a href="registration.html">зарегистрироваться</a>.</p>
     <p id="errorMessage" class="error-message"></p>
   </form>
 </div>
