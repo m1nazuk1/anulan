@@ -92,5 +92,5 @@ public class Message {
         this.sendTime = sendTime;
     }
 
-    // Геттеры и сеттеры
+
 }

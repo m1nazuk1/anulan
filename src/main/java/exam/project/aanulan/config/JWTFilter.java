@@ -32,12 +32,12 @@ public class JWTFilter extends OncePerRequestFilter {
 
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             String jwt = authHeader.substring(7);
-            System.out.println("JWT: " + jwt); // Добавьте это в JWTFilter для отладки
+            System.out.println("JWT: " + jwt);
 
             if (!jwt.isBlank()) {
                 try {
                     String username = jwtUtil.validateTokenAndRetrieveClaim(jwt);
-                    System.out.println("JWT: " + jwt); // Добавьте это в JWTFilter для отладки
+                    System.out.println("JWT: " + jwt);
 
                     UserDetails userDetails = personDetailsService.loadUserByUsername(username);
 

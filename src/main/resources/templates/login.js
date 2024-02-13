@@ -19,8 +19,8 @@ document.getElementById('loginForm').addEventListener('submit', function(e) {
                 errorMessage.textContent = data.message;
             } else {
                 localStorage.setItem('jwt-token', data['jwt-token']);
-                // Сохранение токена в localStorage
-                window.location.href = 'user-info.html'; // Перенаправление на страницу с информацией о пользователе
+
+                window.location.href = 'user-info.html';
             }
         })
         .catch(error => console.error('Ошибка:', error));

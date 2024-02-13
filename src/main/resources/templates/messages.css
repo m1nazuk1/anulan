@@ -39,35 +39,35 @@ body {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     display: flex;
     align-items: center;
-    justify-content: space-around; /* Изменено на space-around для центрирования */
-    max-width: 800px; /* Увеличена максимальная ширина */
+    justify-content: space-around;
+    max-width: 800px;
     margin: auto;
-    flex-wrap: wrap; /* Добавлено для адаптивности */
+    flex-wrap: wrap;
 }
 
 .user-info p {
     color: #333;
-    font-size: 18px; /* Увеличен размер шрифта */
-    line-height: 1.6; /* Увеличен межстрочный интервал */
-    max-width: 50%; /* Ограничение ширины текста */
+    font-size: 18px;
+    line-height: 1.6;
+    max-width: 50%;
 }
 
 
 
 #userImage {
-    max-width: 250px; /* Увеличена максимальная ширину изображения */
-    border: 5px solid #f0f0f0; /* Утолщена рамка вокруг изображения */
-    border-radius: 15px; /* Увеличены скруглённые углы рамки */
-    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2); /* Усиленная тень */
+    max-width: 250px;
+    border: 5px solid #f0f0f0;
+    border-radius: 15px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
 }
 
 @media (max-width: 768px) {
     .user-info p, #userImage {
-        max-width: 100%; /* Позволяет тексту и изображению занимать всю ширину на маленьких экранах */
+        max-width: 100%;
         margin-top: 10px;
     }
     .user-info {
-        flex-direction: column; /* Столбцовое размещение на маленьких экранах */
+        flex-direction: column;
     }
 }
 
@@ -95,18 +95,18 @@ body {
 }
 
 .edit-buttons-container {
-    text-align: center; /* Центрирование содержимого внутри контейнера */
-    width: 100%; /* Ширина контейнера на 100% родителя */
-    margin-top: 20px; /* Отступ сверху для разделения от основного контента */
+    text-align: center;
+    width: 100%;
+    margin-top: 20px;
 }
 
 .edit-user-button {
-    margin: 10px 5px; /* Небольшой отступ для разделения кнопок */
+    margin: 10px 5px;
     background-color: #007bff;
     color: white;
     border: none;
     border-radius: 5px;
-    padding: 12px 20px; /* Увеличенные отступы для увеличения размера кнопки */
+    padding: 12px 20px;
     cursor: pointer;
     transition: background-color 0.3s;
 }
@@ -120,22 +120,22 @@ body {
     color: white;
     border: none;
     border-radius: 5px;
-    padding: 12px 20px; /* Увеличено значение padding */
+    padding: 12px 20px;
     margin: 5px;
     cursor: pointer;
     transition: background-color 0.3s;
-    display: inline-block; /* Для .logout-button и .edit-user-button */
+    display: inline-block;
 }
 .logout-button {
     background-color: red;
     color: white;
     border: none;
     border-radius: 5px;
-    padding: 12px 20px; /* Увеличено значение padding */
+    padding: 12px 20px;
     margin: 5px;
     cursor: pointer;
     transition: background-color 0.3s;
-    display: inline-block; /* Для .logout-button и .edit-user-button */
+    display: inline-block;
 }
 .logout-button:hover{
     background-color: #da7e8e;
@@ -146,11 +146,9 @@ body {
     background-color: #0056b3;
 }
 
-/* Дополнительно, увеличение шрифта для улучшения читаемости */
 .navigation button, .logout-button, .edit-user-button {
-    font-size: 16px; /* Увеличен размер шрифта */
+    font-size: 16px;
 }
-/* Основные стили для контейнера чата */
 .chat-container {
     display: flex;
     flex-direction: column;
@@ -164,42 +162,37 @@ body {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* Стили для списка сообщений */
 .message-list {
     flex-grow: 1;
     padding: 20px;
     overflow-y: auto;
 }
 
-/* Общие стили для сообщений */
 .message {
+    display: flex;
+    flex-direction: column;
     margin: 10px;
     padding: 10px;
     border-radius: 10px;
-    color: #333;
     max-width: 60%;
 }
 
 .sent {
-    background-color: #DCF8C6;
     align-self: flex-end;
-    border-bottom-right-radius: 0;
+    background-color: #DCF8C6;
 }
 
 .received {
-    background-color: #ECECEC;
     align-self: flex-start;
-    border-bottom-left-radius: 0;
+    background-color: #ECECEC;
 }
 
-/* Стили для имени отправителя */
 .sender-name {
     font-size: 0.9em;
     color: #007BFF;
     margin-bottom: 5px;
 }
 
-/* Стили для поля ввода сообщения */
 .message-input {
     border: 2px solid #007BFF;
     border-radius: 18px;
@@ -209,7 +202,6 @@ body {
     resize: none;
 }
 
-/* Стили для кнопки отправки */
 .send-button {
     background-color: #007BFF;
     color: white;
@@ -226,7 +218,6 @@ body {
     background-color: #0056b3;
 }
 
-/* Улучшение скроллбара для списка сообщений */
 .message-list::-webkit-scrollbar {
     width: 8px;
 }
@@ -238,4 +229,19 @@ body {
 
 .message-list::-webkit-scrollbar-track {
     background-color: #f0f2f5;
+}
+
+.sent, .received {
+    width: fit-content;
+    max-width: 80%;
+}
+
+.sent {
+    margin-left: auto;
+    background-color: #DCF8C6;
+}
+
+.received {
+    margin-right: auto;
+    background-color: #ECECEC;
 }

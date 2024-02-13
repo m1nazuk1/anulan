@@ -8,7 +8,7 @@ public class MessageDto {
     private String content;
     private LocalDateTime sendTime;
 
-    // Конструкторы
+
 
     public MessageDto() {
     }
@@ -20,7 +20,7 @@ public class MessageDto {
         this.sendTime = sendTime;
     }
 
-    // Геттеры и сеттеры
+
 
     public Integer getSenderId() {
         return senderId;

@@ -23,8 +23,8 @@ document.getElementById('registrationForm-2').addEventListener('submit', functio
     })
         .then(data => {
             if (data.message) {
-                alert(data.message); // Показываем сообщение об успешном обновлении
-                window.location.href = 'user-info.html'; // Перенаправляем на страницу с информацией о пользователе
+                alert(data.message);
+                window.location.href = 'user-info.html';
             }
         })
         .catch(error => console.error('Ошибка:', error));

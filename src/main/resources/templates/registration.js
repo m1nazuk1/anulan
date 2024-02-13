@@ -24,7 +24,7 @@ document.getElementById('registrationForm').addEventListener('submit', function(
                 errorMessage.textContent = data.message;
             } else {
                 console.log('JWT Token:', data['jwt-token']);
-                window.location.href = 'login.html'; // Перенаправление на страницу авторизации
+                window.location.href = 'login.html';
             }
         })
         .catch(error => console.error('Ошибка:', error));

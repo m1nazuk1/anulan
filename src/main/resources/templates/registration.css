@@ -11,74 +11,74 @@ body {
 
 .form-container {
     background: white;
-    padding: 50px; /* Increased padding */
+    padding: 50px;
     border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* Slightly darker shadow for depth */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
     width: 100%;
-    max-width: 450px; /* Increased form width */
+    max-width: 450px;
     animation: fadeIn 0.5s ease-in-out;
 }
 
 h2 {
     color: #333;
-    font-size: 26px; /* Increased font size for header */
-    margin-bottom: 25px; /* Increased bottom margin for spacing */
+    font-size: 26px;
+    margin-bottom: 25px;
     text-align: center;
 }
 
 .form-group {
-    margin-bottom: 25px; /* Increased spacing between form elements */
+    margin-bottom: 25px;
 }
 
 .form-group label {
     display: block;
-    margin-bottom: 8px; /* Increased margin for clarity */
-    font-size: 18px; /* Increased font size for readability */
+    margin-bottom: 8px;
+    font-size: 18px;
 }
 
 .form-group input[type="text"],
 .form-group input[type="number"],
 .form-group input[type="password"] {
     width: 100%;
-    padding: 12px; /* Increased padding for input fields */
+    padding: 12px;
     border: 1px solid #ccc;
     border-radius: 5px;
     box-sizing: border-box;
-    font-size: 16px; /* Increased font size for input text */
+    font-size: 16px;
 }
 
 .button, button {
     display: block;
     width: 100%;
-    padding: 12px; /* Increased padding for larger buttons */
+    padding: 12px;
     border: none;
     background-color: #007bff;
     color: white;
     border-radius: 5px;
     cursor: pointer;
-    font-size: 18px; /* Increased font size for button text */
+    font-size: 18px;
     transition: background-color 0.3s ease;
 }
 
 .button:hover, button:hover {
-    background-color: #0056b3; /* Darker shade on hover */
+    background-color: #0056b3;
 }
 
 .error-message {
     color: red;
     text-align: center;
-    margin-top: 10px; /* Added top margin for error message */
+    margin-top: 10px;
 }
 
 input:focus {
     border-color: #007bff;
-    box-shadow: 0 0 0 2px rgba(0,123,255,.25); /* Focus shadow for input fields */
+    box-shadow: 0 0 0 2px rgba(0,123,255,.25);
 }
 
 .link-text,
 .registration-invite {
     text-align: center;
-    margin-top: 20px; /* Spacing above links */
+    margin-top: 20px;
 }
 
 .link-text a,
@@ -86,7 +86,7 @@ input:focus {
     color: #007bff;
     text-decoration: none;
     font-weight: bold;
-    font-size: 16px; /* Increased font size for links */
+    font-size: 16px;
 }
 
 @keyframes fadeIn {

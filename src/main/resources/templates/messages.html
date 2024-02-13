@@ -57,17 +57,18 @@
                 const messageList = document.getElementById('messageList');
                 messageList.innerHTML = '';
                 data.forEach(message => {
+
                     const messageWrapper = document.createElement('div');
                     messageWrapper.className = 'message';
 
-                    const isCurrentUserSender = message.sender.id === userId;
+                    const isCurrentUserSender = Number(data.senderId) === Number(userId);
 
                     messageWrapper.classList.add(isCurrentUserSender ? 'sent' : 'received');
 
                     if (!isCurrentUserSender) {
                         const senderNameElement = document.createElement('div');
                         senderNameElement.className = 'sender-name';
-                        senderNameElement.textContent = message.senderName; // Теперь правильно
+                        senderNameElement.textContent = message.senderName;
                         messageWrapper.appendChild(senderNameElement);
                     }
 
@@ -77,6 +78,9 @@
 
                     messageList.appendChild(messageWrapper);
                 });
+                if (messageList.lastElementChild) {
+                    messageList.lastElementChild.scrollIntoView({ behavior: 'smooth', block: 'end' });
+                }
             })
             .catch(error => console.error('Ошибка:', error));
     }
@@ -88,12 +92,12 @@
 
     function sendMessage() {
         const messageText = document.getElementById('messageText').value;
-        if (!messageText.trim()) return; // Не отправлять пустое сообщение
+        if (!messageText.trim()) return;
 
         const messageData = {
             senderId: userId,
             receiverId: contactId,
-            content: messageText // Изменено с text на content
+            content: messageText
         };
 
         fetch('http://localhost:8080/messages/send', {
@@ -108,11 +112,19 @@
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
-                fetchMessages(); // Обновить список сообщений после отправки
-                document.getElementById('messageText').value = ''; // Очистить поле ввода
+                fetchMessages();
+                document.getElementById('messageText').value = '';
             })
             .catch(error => console.error('Ошибка:', error));
     }
+
+    document.getElementById('messageText').addEventListener('keydown', function(event) {
+        if (event.key === 'Enter' && !event.shiftKey) {
+            event.preventDefault();
+            sendMessage();
+        }
+    });
+
 </script>
 
 </body>

@@ -57,7 +57,6 @@ public class MessageController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Person person = personDetailsService.loadPersonByUsername(((PersonDetails) authentication.getPrincipal()).getUsername());
 
-        System.out.println(messageDto.getContent());
         Message message = new Message();
         message.setSenderName(person.getFirstname());
         message.setReceiverName(receiver.getFirstname());
