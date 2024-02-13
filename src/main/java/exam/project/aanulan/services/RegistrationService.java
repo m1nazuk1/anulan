@@ -1,5 +1,6 @@
 package exam.project.aanulan.services;
 
+import exam.project.aanulan.models.Image;
 import exam.project.aanulan.models.Person;
 import exam.project.aanulan.repositories.PeopleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,8 +30,8 @@ public class RegistrationService {
         person.setPassword(passwordEncoder.encode(person.getPassword()));
         person.setRole("ROLE_USER");
 
-
         peopleRepository.save(person);
+
     }
 
 }

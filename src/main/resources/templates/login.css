@@ -11,11 +11,11 @@ body {
 
 .form-container {
     background: white;
-    padding: 40px;
+    padding: 50px; /* Increased padding */
     border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Slightly darker shadow */
     width: 100%;
-    max-width: 400px;
+    max-width: 450px; /* Increased max width */
     animation: fadeIn 0.5s ease-in-out;
 }
 
@@ -26,29 +26,31 @@ body {
 
 h2 {
     color: #333;
-    font-size: 24px;
-    margin-bottom: 20px;
+    font-size: 26px; /* Increased font size */
+    margin-bottom: 25px; /* Increased margin */
     text-align: center;
 }
 
 .form-group {
-    margin-bottom: 20px;
+    margin-bottom: 25px; /* Increased margin */
     position: relative;
 }
 
 .form-group label {
     display: block;
-    margin-bottom: 5px;
+    margin-bottom: 8px; /* Increased margin */
+    font-size: 18px; /* Increased font size */
 }
 
 .form-group input[type="text"],
 .form-group input[type="password"] {
     width: 100%;
-    padding: 10px;
+    padding: 12px; /* Increased padding */
     border: 1px solid #ccc;
     border-radius: 5px;
     box-sizing: border-box;
     transition: border-color 0.3s ease;
+    font-size: 16px; /* Increased font size */
 }
 
 .form-group input[type="text"]:focus,
@@ -65,21 +67,22 @@ h2 {
 
 .toggle-password {
     position: absolute;
-    right: 10px;
+    right: 15px; /* Adjusted for increased padding */
     cursor: pointer;
     user-select: none;
 }
 
 button {
     width: 100%;
-    padding: 10px;
+    padding: 12px; /* Increased padding */
     border: none;
     background-color: #007bff;
     color: white;
     border-radius: 5px;
     cursor: pointer;
-    font-size: 16px;
+    font-size: 18px; /* Increased font size */
     transition: background-color 0.3s, transform 0.2s;
+    margin-top: 20px; /* Ensure space between last input and button */
 }
 
 button:hover {
@@ -87,19 +90,23 @@ button:hover {
     transform: translateY(-2px);
 }
 
-.registration-invite {
+.registration-invite,
+.error-message {
     text-align: center;
-    margin-top: 20px;
+    margin-top: 20px; /* Adjusted margin for better spacing */
+}
+
+.registration-invite a,
+.error-message {
+    font-size: 16px; /* Increased font size for better readability */
+}
+
+.error-message {
+    color: red;
 }
 
 .registration-invite a {
     color: #007bff;
     text-decoration: none;
     font-weight: bold;
-}
-
-.error-message {
-    color: red;
-    text-align: center;
-    margin-top: 10px;
 }

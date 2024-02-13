@@ -4,6 +4,7 @@ import exam.project.aanulan.dto.PersonDTO;
 import exam.project.aanulan.models.Person;
 import exam.project.aanulan.security.PersonDetails;
 import exam.project.aanulan.services.AdminService;
+import exam.project.aanulan.services.ImageService;
 import exam.project.aanulan.services.PersonDetailsService;
 import exam.project.aanulan.services.PersonService;
 import exam.project.aanulan.util.PersonValidator;
@@ -15,12 +16,11 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.Map;
 
 
@@ -35,16 +35,17 @@ public class ProfileController {
 
     private final PersonService personService;
 
-
+    private final ImageService imageService;
 
 
     @Autowired
-    public ProfileController(AdminService adminService, PersonDetailsService personDetailsService, ModelMapper modelMapper, PersonValidator personValidator, PersonService personService) {
+    public ProfileController(AdminService adminService, PersonDetailsService personDetailsService, ModelMapper modelMapper, PersonValidator personValidator, PersonService personService, ImageService imageService) {
         this.adminService = adminService;
         this.personDetailsService = personDetailsService;
         this.modelMapper = modelMapper;
         this.personValidator = personValidator;
         this.personService = personService;
+        this.imageService = imageService;
     }
 
     @GetMapping("/hello")
@@ -69,7 +70,8 @@ public class ProfileController {
                     "yearOfBirth", person.getYearOfBirth(),
                     "description", person.getDescription(),
                     "username", person.getUsername(),
-                    "password", person.getPassword()));
+                    "password", person.getPassword(),
+                    "imageId", person.getPreviewImageId()));
         } catch (ClassCastException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Ошибка при обработке данных пользователя");
         } catch (Exception e) {
@@ -77,6 +79,22 @@ public class ProfileController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Внутренняя ошибка сервера");
         }
     }
+
+
+//    @PostMapping("/path-to-upload")
+//    @CrossOrigin(origins = "http://localhost:3000")
+//    @ResponseBody
+//    public ResponseEntity<?> handleFileUpload(@RequestParam("image") MultipartFile file,
+//                                              @RequestParam("username") String name) throws IOException {
+//        if (file.isEmpty()) {
+//            return ResponseEntity.badRequest().body("Файл не был получен");
+//        }
+//
+//        imageService.enterImageId(name, file);
+//
+//
+//        return ResponseEntity.ok("Файл успешно загружен: " + file.getOriginalFilename());
+//    }
 
 
     @PostMapping("/editUserInfo")
