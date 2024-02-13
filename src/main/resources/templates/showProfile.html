@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Информация о пользователе</title>
+  <link rel="stylesheet" href="showProfile.css">
+</head>
+<body>
+<div class="header">
+  <h1 class="brand-name">anulan</h1>
+  <nav class="navigation">
+    <button onclick="window.location.href='messages.html';">Сообщения</button>
+    <button onclick="window.location.href='users.html';">Пользователи</button>
+    <button onclick="window.location.href='user-info.html';">Моя страница</button>
+  </nav>
+</div>
+<div class="user-info">
+  <p id="userInfo"></p>
+  <img id="userImage" src="" alt="User Image" />
+</div>
+<div class="edit-buttons-container">
+  <button id="sendMessageButton" class="edit-user-button">Написать сообщение</button>
+</div>
+<script src="showProfile.js"></script>
+</body>
+</html>

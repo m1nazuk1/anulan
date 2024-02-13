@@ -2,6 +2,7 @@ package exam.project.aanulan.controllers;
 
 import exam.project.aanulan.dto.PersonDTO;
 import exam.project.aanulan.models.Person;
+import exam.project.aanulan.repositories.PeopleRepository;
 import exam.project.aanulan.security.PersonDetails;
 import exam.project.aanulan.services.AdminService;
 import exam.project.aanulan.services.ImageService;
@@ -17,10 +18,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
-import java.io.IOException;
 import java.util.Map;
 
 
@@ -33,17 +32,21 @@ public class ProfileController {
 
     private final PersonValidator personValidator;
 
+    private final PeopleRepository peopleRepository;
+
     private final PersonService personService;
 
     private final ImageService imageService;
 
 
+
     @Autowired
-    public ProfileController(AdminService adminService, PersonDetailsService personDetailsService, ModelMapper modelMapper, PersonValidator personValidator, PersonService personService, ImageService imageService) {
+    public ProfileController(AdminService adminService, PersonDetailsService personDetailsService, ModelMapper modelMapper, PersonValidator personValidator, PeopleRepository peopleRepository, PersonService personService, ImageService imageService) {
         this.adminService = adminService;
         this.personDetailsService = personDetailsService;
         this.modelMapper = modelMapper;
         this.personValidator = personValidator;
+        this.peopleRepository = peopleRepository;
         this.personService = personService;
         this.imageService = imageService;
     }
@@ -78,6 +81,32 @@ public class ProfileController {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Внутренняя ошибка сервера");
         }
+    }
+
+
+    @GetMapping("/showProfile/{username}")
+    @ResponseBody
+    public ResponseEntity<?> showProfile(@PathVariable("username") String username){
+        try {
+            Person person = personService.foundByUsername(username);
+            System.out.println(person);
+            System.out.println(person.getFirstname());
+            return ResponseEntity.ok(Map.of(
+                    "firstname", person.getFirstname(),
+                    "lastname", person.getLastname(),
+                    "yearOfBirth", person.getYearOfBirth(),
+                    "description", person.getDescription(),
+                    "username", person.getUsername(),
+                    "password", person.getPassword(),
+                    "imageId", person.getPreviewImageId()));
+        }catch (ClassCastException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Ошибка при обработке данных пользователя");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Внутренняя ошибка сервера");
+        }
+
+
     }
 
 

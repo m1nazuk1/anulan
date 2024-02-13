@@ -3,6 +3,7 @@ package exam.project.aanulan.config;
 import exam.project.aanulan.services.PersonDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -39,7 +40,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/admin").hasRole("ADMIN")
-                .antMatchers("/auth/login", "/auth/registration", "/error", "/images/*").permitAll()
+                .antMatchers("/auth/login", "/auth/registration", "/error", "/images/*", "/users/all").permitAll()
                 .antMatchers("/showUserInfo").authenticated()
                 .anyRequest().hasAnyRole("USER", "ADMIN")
                 .and()

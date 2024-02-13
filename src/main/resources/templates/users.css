@@ -151,3 +151,37 @@ body {
     font-size: 16px; /* Увеличен размер шрифта */
 }
 
+.users-container {
+    max-width: 800px;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.user-card {
+    background-color: #fff;
+    padding: 20px;
+    margin: 10px 0;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.user-card img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 20px;
+}
+
+.user-card p {
+    margin: 0;
+    font-weight: bold;
+}
+
+.user-card:hover {
+    background-color: #f0f0f0;
+}

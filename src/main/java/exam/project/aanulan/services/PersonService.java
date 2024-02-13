@@ -7,6 +7,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -33,6 +35,18 @@ public class PersonService {
         personNew.setRole(personOld.getRole());
         personNew.setPassword(personOld.getPassword());
         peopleRepository.save(personNew);
-        AuthController.username=personNew.getUsername();
     }
+
+    public List<Person> returnAllUsersExceptMe(String username){
+        List<Person> users = peopleRepository.findAll();
+        System.out.println(users);
+        List<Person> answer = new ArrayList<>();
+        for (Person person: users) {
+            if (!person.getUsername().equals(username)){
+                answer.add(person);
+            }
+        }
+        return answer;
+    }
+
 }
