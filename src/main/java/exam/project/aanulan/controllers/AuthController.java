@@ -37,7 +37,7 @@ public class AuthController {
 
     private final ImageService imageService;
 
-    private String username;
+    public static String username;
 
     @Autowired
     public AuthController(RegistrationService registrationService, PersonValidator personValidator,

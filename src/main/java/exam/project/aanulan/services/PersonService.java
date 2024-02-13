@@ -1,5 +1,6 @@
 package exam.project.aanulan.services;
 
+import exam.project.aanulan.controllers.AuthController;
 import exam.project.aanulan.models.Person;
 import exam.project.aanulan.repositories.PeopleRepository;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -32,5 +33,6 @@ public class PersonService {
         personNew.setRole(personOld.getRole());
         personNew.setPassword(personOld.getPassword());
         peopleRepository.save(personNew);
+        AuthController.username=personNew.getUsername();
     }
 }
