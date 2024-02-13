@@ -31,3 +31,17 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .catch(error => console.error('Ошибка:', error));
 });
+
+document.getElementById('searchInput').addEventListener('input', function(e) {
+    const searchValue = e.target.value.toLowerCase();
+    const userCards = document.querySelectorAll('.user-card');
+
+    userCards.forEach(card => {
+        const userName = card.querySelector('p').textContent.toLowerCase();
+        if (userName.includes(searchValue)) {
+            card.style.display = '';
+        } else {
+            card.style.display = 'none';
+        }
+    });
+});

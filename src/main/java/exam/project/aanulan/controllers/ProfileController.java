@@ -38,6 +38,7 @@ public class ProfileController {
 
     private final ImageService imageService;
 
+    public static int contactId;
 
 
     @Autowired
@@ -89,6 +90,7 @@ public class ProfileController {
     public ResponseEntity<?> showProfile(@PathVariable("username") String username){
         try {
             Person person = personService.foundByUsername(username);
+            contactId = person.getId();
             System.out.println(person);
             System.out.println(person.getFirstname());
             return ResponseEntity.ok(Map.of(

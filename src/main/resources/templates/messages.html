@@ -14,7 +14,106 @@
         <button onclick="window.location.href='user-info.html';">Моя страница</button>
     </nav>
 </div>
+<div class="chat-container">
+    <div id="messageList" class="message-list"></div>
+    <textarea id="messageText" class="message-input"></textarea>
+    <button onclick="sendMessage()" class="send-button">Отправить</button>
+</div>
 
-<script src="messages.js"></script>
+<script>
+
+    let userId = 0;
+    let contactId = 0;
+    fetch(`http://localhost:8080/senderId/contactId`, {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${localStorage.getItem('jwt-token')}`
+        }
+    })
+        .then(response => response.json())
+        .then(data => {
+            userId = data.first;
+            contactId = data.second;
+            fetchMessages();
+        }).catch(error => console.error('Ошибка:', error));
+
+
+    document.addEventListener('DOMContentLoaded', fetchMessages);
+
+    function fetchMessages() {
+        fetch(`http://localhost:8080/messages/${userId}/${contactId}`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('jwt-token')}`
+            }
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                const messageList = document.getElementById('messageList');
+                messageList.innerHTML = '';
+                data.forEach(message => {
+                    const messageWrapper = document.createElement('div');
+                    messageWrapper.className = 'message';
+
+                    const isCurrentUserSender = message.sender.id === userId;
+
+                    messageWrapper.classList.add(isCurrentUserSender ? 'sent' : 'received');
+
+                    if (!isCurrentUserSender) {
+                        const senderNameElement = document.createElement('div');
+                        senderNameElement.className = 'sender-name';
+                        senderNameElement.textContent = message.senderName; // Теперь правильно
+                        messageWrapper.appendChild(senderNameElement);
+                    }
+
+                    const messageContent = document.createElement('div');
+                    messageContent.textContent = message.content;
+                    messageWrapper.appendChild(messageContent);
+
+                    messageList.appendChild(messageWrapper);
+                });
+            })
+            .catch(error => console.error('Ошибка:', error));
+    }
+
+
+
+
+
+
+    function sendMessage() {
+        const messageText = document.getElementById('messageText').value;
+        if (!messageText.trim()) return; // Не отправлять пустое сообщение
+
+        const messageData = {
+            senderId: userId,
+            receiverId: contactId,
+            content: messageText // Изменено с text на content
+        };
+
+        fetch('http://localhost:8080/messages/send', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('jwt-token')}`
+            },
+            body: JSON.stringify(messageData)
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                fetchMessages(); // Обновить список сообщений после отправки
+                document.getElementById('messageText').value = ''; // Очистить поле ввода
+            })
+            .catch(error => console.error('Ошибка:', error));
+    }
+</script>
+
 </body>
 </html>

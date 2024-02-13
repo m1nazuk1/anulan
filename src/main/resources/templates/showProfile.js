@@ -15,6 +15,8 @@ document.addEventListener('DOMContentLoaded', function() {
         return response.json();
     }).then(data => {
         console.log(data.username);
+
+
         const imageUrl = `http://localhost:8080/images/${data.username}`;
         fetch(imageUrl)
             .then(response => response.blob())
@@ -23,11 +25,18 @@ document.addEventListener('DOMContentLoaded', function() {
                 document.getElementById('userImage').src = imageObjectURL;
             })
             .catch(error => console.error('Ошибка загрузки изображения:', error));
+        localStorage.setItem("userId", data.senderId);
+        localStorage.setItem("contactId", data.sss)
+
         userInfo.innerHTML = `${data.firstname} ${data.lastname} <br>
     Год рождения: ${data.yearOfBirth} <br> О себе: ${data.description}`;
     }) .catch(error => {
         console.error('Ошибка:', error);
         userInfo.textContent = 'Произошла ошибка при получении информации о пользователе.';
+    });
+
+    document.getElementById('sendMessageButton').addEventListener('click', function() {
+        window.location.href = 'messages.html';
     });
 
 });

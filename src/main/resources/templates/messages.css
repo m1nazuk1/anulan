@@ -150,4 +150,92 @@ body {
 .navigation button, .logout-button, .edit-user-button {
     font-size: 16px; /* Увеличен размер шрифта */
 }
+/* Основные стили для контейнера чата */
+.chat-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    max-width: 800px;
+    height: 80vh;
+    margin: 20px auto;
+    border: 1px solid #007BFF;
+    border-radius: 8px;
+    background-color: #f0f2f5;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
 
+/* Стили для списка сообщений */
+.message-list {
+    flex-grow: 1;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+/* Общие стили для сообщений */
+.message {
+    margin: 10px;
+    padding: 10px;
+    border-radius: 10px;
+    color: #333;
+    max-width: 60%;
+}
+
+.sent {
+    background-color: #DCF8C6;
+    align-self: flex-end;
+    border-bottom-right-radius: 0;
+}
+
+.received {
+    background-color: #ECECEC;
+    align-self: flex-start;
+    border-bottom-left-radius: 0;
+}
+
+/* Стили для имени отправителя */
+.sender-name {
+    font-size: 0.9em;
+    color: #007BFF;
+    margin-bottom: 5px;
+}
+
+/* Стили для поля ввода сообщения */
+.message-input {
+    border: 2px solid #007BFF;
+    border-radius: 18px;
+    padding: 10px 20px;
+    margin: 20px;
+    font-size: 1em;
+    resize: none;
+}
+
+/* Стили для кнопки отправки */
+.send-button {
+    background-color: #007BFF;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 18px;
+    cursor: pointer;
+    font-size: 1em;
+    margin: 20px;
+    transition: background-color 0.2s;
+}
+
+.send-button:hover {
+    background-color: #0056b3;
+}
+
+/* Улучшение скроллбара для списка сообщений */
+.message-list::-webkit-scrollbar {
+    width: 8px;
+}
+
+.message-list::-webkit-scrollbar-thumb {
+    background-color: #007BFF;
+    border-radius: 4px;
+}
+
+.message-list::-webkit-scrollbar-track {
+    background-color: #f0f2f5;
+}

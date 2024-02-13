@@ -185,3 +185,16 @@ body {
 .user-card:hover {
     background-color: #f0f0f0;
 }
+
+.search-container {
+    text-align: center;
+    margin: 20px 0;
+}
+
+.search-container input[type="text"] {
+    padding: 15px;
+    width: 90%;
+    max-width: 500px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
