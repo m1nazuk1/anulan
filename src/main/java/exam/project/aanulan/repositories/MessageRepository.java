@@ -12,4 +12,6 @@ import java.util.List;
 public interface MessageRepository extends JpaRepository<Message, Integer> {
     @Query("SELECT m FROM Message m WHERE (m.sender.id = :userId AND m.receiver.id = :contactId) OR (m.sender.id = :contactId AND m.receiver.id = :userId) ORDER BY m.sendTime ASC")
     List<Message> findMessagesBetweenUsers(int userId, int contactId);
+
+
 }

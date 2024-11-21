@@ -13,7 +13,7 @@ import java.util.List;
 
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 @Entity
-@Table(name = "Person")
+@Table(name = "person")
 public class Person {
     @Id
     @Column(name = "id")

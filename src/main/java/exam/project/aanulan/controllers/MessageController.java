@@ -42,9 +42,16 @@ public class MessageController {
         return Map.of(
                 "first", person1.getId(),
                 "second", ProfileController.contactId
-                );
+        );
 
     }
+
+//    @GetMapping("/correspondence/myAllList")
+//    public ResponseEntity<List<Person>> allCorrespondence(){
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        Person person1= personDetailsService.loadPersonByUsername(((PersonDetails) authentication.getPrincipal()).getUsername());
+//
+//    }
 
     @PostMapping("/messages/send")
     public ResponseEntity<?> sendMessage(@RequestBody MessageDto messageDto) {

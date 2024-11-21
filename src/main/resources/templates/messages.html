@@ -56,14 +56,30 @@
             .then(data => {
                 const messageList = document.getElementById('messageList');
                 messageList.innerHTML = '';
+                let count = 1;
+                let myName = "";
+                let firstId = 0;
                 data.forEach(message => {
 
                     const messageWrapper = document.createElement('div');
                     messageWrapper.className = 'message';
 
-                    const isCurrentUserSender = Number(data.senderId) === Number(userId);
+                    const isCurrentUserSender = Number(message.sender.id) === Number(userId);
 
-                    messageWrapper.classList.add(isCurrentUserSender ? 'sent' : 'received');
+                    if (count === 1) {
+                        if (Number(message.sender.id) === Number(userId)) {
+                            messageWrapper.classList.add('sent');
+                            myName = message.senderName;
+                        } else {
+                            messageWrapper.classList.add('received');
+                            myName = message.senderName;
+                        }
+                        count = 0;
+                    }else if (message.senderName === myName){
+                        messageWrapper.classList.add('sent');
+                    }else {
+                        messageWrapper.classList.add('received');
+                    }
 
                     if (!isCurrentUserSender) {
                         const senderNameElement = document.createElement('div');
