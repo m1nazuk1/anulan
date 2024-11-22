@@ -1,7 +1,6 @@
 package exam.project.aanulan.models;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import javax.persistence.*;
@@ -15,6 +14,7 @@ import java.util.List;
 @Entity
 @Table(name = "person")
 public class Person {
+
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,7 +29,6 @@ public class Person {
     @Size(min = 2, max = 100, message = "Имя должно быть от 2 до 100 символов длиной")
     @Column(name = "firstname")
     private String firstname;
-
 
     @NotEmpty(message = "Фамилия не должна быть пустым")
     @Size(min = 2, max = 100, message = "Фамилия должна быть от 2 до 100 символов длиной")
@@ -51,18 +50,14 @@ public class Person {
     @Column(name = "description")
     private String description;
 
+    @OneToMany(mappedBy = "sender", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Message> sentMessages = new ArrayList<>();
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "person")
-    @JsonManagedReference
-    private List<Image> images = new ArrayList<>();
+    @OneToMany(mappedBy = "receiver", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Message> receivedMessages = new ArrayList<>();
 
-    @Column(name = "preview_image_id")
-    private int previewImageId;
-
-    public void addImageToProduct(Image image) {
-        image.setPerson(this);
-        images.add(image);
-    }
+    @ManyToMany(mappedBy = "participants")
+    private List<Chat> chats = new ArrayList<>();
 
     public Person() {
     }
@@ -72,44 +67,6 @@ public class Person {
         this.firstname = firstname;
         this.lastname = lastname;
         this.yearOfBirth = yearOfBirth;
-        this.description = description;
-    }
-
-    public int getPreviewImageId() {
-        return previewImageId;
-    }
-
-    public void setPreviewImageId(int previewImageId) {
-        this.previewImageId = previewImageId;
-    }
-
-    public List<Image> getImages() {
-        return images;
-    }
-
-    public void setImages(List<Image> images) {
-        this.images = images;
-    }
-
-    public String getFirstname() {return firstname;}
-
-    public void setFirstname(String firstname) {
-        this.firstname = firstname;
-    }
-
-    public String getLastname() {
-        return lastname;
-    }
-
-    public void setLastname(String lastname) {
-        this.lastname = lastname;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
         this.description = description;
     }
 
@@ -127,6 +84,22 @@ public class Person {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getFirstname() {
+        return firstname;
+    }
+
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
+    }
+
+    public String getLastname() {
+        return lastname;
+    }
+
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
     }
 
     public int getYearOfBirth() {
@@ -153,13 +126,52 @@ public class Person {
         this.role = role;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public List<Message> getSentMessages() {
+        return sentMessages;
+    }
+
+    public void setSentMessages(List<Message> sentMessages) {
+        this.sentMessages = sentMessages;
+    }
+
+    public List<Message> getReceivedMessages() {
+        return receivedMessages;
+    }
+
+    public void setReceivedMessages(List<Message> receivedMessages) {
+        this.receivedMessages = receivedMessages;
+    }
+
+    public List<Chat> getChats() {
+        return chats;
+    }
+
+    public void setChats(List<Chat> chats) {
+        this.chats = chats;
+    }
+
+    public void addChat(Chat chat) {
+        this.chats.add(chat);
+        chat.getParticipants().add(this);
+    }
+
     @Override
     public String toString() {
         return "Person{" +
                 "id=" + id +
                 ", username='" + username + '\'' +
+                ", firstname='" + firstname + '\'' +
+                ", lastname='" + lastname + '\'' +
                 ", yearOfBirth=" + yearOfBirth +
-                ", password='" + password + '\'' +
+                ", role='" + role + '\'' +
                 '}';
     }
 }
