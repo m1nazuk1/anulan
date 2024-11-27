@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './UserInfo.css';
+import LoadingIndicator from './LoadingInficator';
 
 const ShowProfile: React.FC = () => {
     const [userInfo, setUserInfo] = useState<any>(null);
     const [userImage, setUserImage] = useState<string>('');
     const [errorMessage, setErrorMessage] = useState<string>('');
+    const [loading, setLoading] = useState<boolean>(true); // Статус загрузки
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -14,8 +16,11 @@ const ShowProfile: React.FC = () => {
 
         if (!username || !jwtToken) {
             setErrorMessage('Ошибка: Нет данных для отображения');
+            setLoading(false); // Отключаем индикатор загрузки, если данных нет
             return;
         }
+
+        setLoading(true); // Включаем индикатор загрузки
 
         // Получаем основную информацию о пользователе
         fetch(`http://localhost:8080/showProfile/${username}`, {
@@ -39,10 +44,14 @@ const ShowProfile: React.FC = () => {
                         const imageObjectURL = URL.createObjectURL(imageBlob);
                         setUserImage(imageObjectURL);
                     })
-                    .catch((error) => console.error('Ошибка загрузки изображения:', error));
+                    .catch((error) => {
+                        console.error('Ошибка загрузки изображения:', error);
+                    })
+                    .finally(() => setLoading(false)); // Отключаем индикатор после загрузки изображения
             })
             .catch((error) => {
                 setErrorMessage('Ошибка при получении информации о пользователе');
+                setLoading(false); // Отключаем индикатор в случае ошибки
                 console.error(error);
             });
 
@@ -81,6 +90,10 @@ const ShowProfile: React.FC = () => {
                 console.error(error);
             });
     };
+
+    if (loading) {
+        return <LoadingIndicator />; // Показываем индикатор загрузки, пока данные загружаются
+    }
 
     return (
         <div className="profile-container">

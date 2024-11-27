@@ -9,6 +9,7 @@ import EditPhoto from "./components/EditPhoto";
 import Users from "./components/Users";
 import Messages from "./components/Messages";
 import UserContacts from "./components/UserContacts";
+import LoadingIndicator from "./components/LoadingInficator";
 
 const App: React.FC = () => {
     return (
@@ -24,6 +25,7 @@ const App: React.FC = () => {
                 <Route path="/users" element={<Users />} />
                 <Route path="/messages" element={<Messages />} />
                 <Route path="/user-contacts" element={<UserContacts />} />
+                <Route path="/loadingIndicator" element={<LoadingIndicator />} />
             </Routes>
         </Router>
     );

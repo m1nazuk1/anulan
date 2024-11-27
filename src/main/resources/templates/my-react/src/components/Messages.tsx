@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { FiArrowLeft, FiSend } from 'react-icons/fi'; // Импортируем иконку стрелки назад
 import { FiTrash2 } from 'react-icons/fi';
 import './Messages.css';
+import LoadingIndicator from './LoadingInficator';
 
 interface Message {
     id: number;
@@ -22,9 +23,9 @@ const Messages: React.FC = () => {
     const [contactId, setContactId] = useState<number | null>(null);
     const [messages, setMessages] = useState<Message[]>([]);
     const [messageText, setMessageText] = useState<string>('');
+    const [loading, setLoading] = useState<boolean>(true); // Статус загрузки
     const messageListRef = useRef<HTMLDivElement | null>(null);
     const navigate = useNavigate();
-
 
     const fetchUserData = async () => {
         const jwtToken = localStorage.getItem('jwt-token');
@@ -53,6 +54,7 @@ const Messages: React.FC = () => {
     };
 
     const fetchMessages = (userId: number, contactId: number) => {
+        setLoading(true); // Включаем индикатор загрузки
         fetch(`http://localhost:8080/messages/${userId}/${contactId}`, {
             method: 'GET',
             headers: {
@@ -67,9 +69,13 @@ const Messages: React.FC = () => {
             })
             .then((data) => {
                 setMessages(data);
+                setLoading(false); // Отключаем индикатор загрузки
                 scrollToBottom();
             })
-            .catch((error) => console.error('Ошибка:', error));
+            .catch((error) => {
+                setLoading(false); // Отключаем индикатор загрузки в случае ошибки
+                console.error('Ошибка:', error);
+            });
     };
 
     const sendMessage = () => {
@@ -174,41 +180,45 @@ const Messages: React.FC = () => {
             </div>
             {/* Кнопка стрелки назад */}
             <button className="back-button" onClick={() => navigate('/user-contacts')}>
-                <FiArrowLeft size={20} color="blue"/>
+                <FiArrowLeft size={20} color="blue" />
             </button>
             <div className="chat-container">
+                {loading ? (
+                    <LoadingIndicator /> // Показываем индикатор загрузки, если данные еще загружаются
+                ) : (
+                    <>
+                        <div ref={messageListRef} className="message-list">
+                            {messages.map((message, index) => {
+                                const isCurrentUserSender = message.senderName === localStorage.getItem("currentUserName");
 
-                <div ref={messageListRef} className="message-list">
-                    {messages.map((message, index) => {
-                        const isCurrentUserSender = message.senderName === localStorage.getItem("currentUserName");
+                                return (
+                                    <div key={message.id || index}
+                                         className={`message ${isCurrentUserSender ? 'sent' : 'received'} ${message.isDeleting ? 'delete' : ''}`}>
+                                        <div className="message-content">{message.content}</div>
+                                        <div className="message-time">{new Date(message.sendTime).toLocaleString()}</div>
 
-                        return (
-                            <div key={message.id || index}
-                                 className={`message ${isCurrentUserSender ? 'sent' : 'received'} ${message.isDeleting ? 'delete' : ''}`}>
-                                <div className="message-content">{message.content}</div>
-                                <div className="message-time">{new Date(message.sendTime).toLocaleString()}</div>
-
-                                <div className="delete-button" onClick={() => handleDeleteMessage(message.id)}>
-                                    <FiTrash2 size={16} color="red"/>
-                                </div>
-                            </div>
-                        );
-                    })}
-                </div>
-
-                <div className="input-container">
-                    <textarea
-                        className="message-input"
-                        value={messageText}
-                        onChange={handleMessageChange}
-                        onKeyDown={handleKeyDown}
-                        placeholder="Введите сообщение"
-                    />
-                    {/* Кнопка отправки с иконкой стрелки */}
-                    <button className="send-button" onClick={sendMessage}>
-                        <FiSend size={40} color="white" />
-                    </button>
-                </div>
+                                        <div className="delete-button" onClick={() => handleDeleteMessage(message.id)}>
+                                            <FiTrash2 size={16} color="red" />
+                                        </div>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                        <div className="input-container">
+                            <textarea
+                                className="message-input"
+                                value={messageText}
+                                onChange={handleMessageChange}
+                                onKeyDown={handleKeyDown}
+                                placeholder="Введите сообщение"
+                            />
+                            {/* Кнопка отправки с иконкой стрелки */}
+                            <button className="send-button" onClick={sendMessage}>
+                                <FiSend size={40} color="white" />
+                            </button>
+                        </div>
+                    </>
+                )}
             </div>
         </div>
     );

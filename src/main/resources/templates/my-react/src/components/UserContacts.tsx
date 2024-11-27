@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './UserContacts.css';
+import LoadingIndicator from './LoadingInficator';
 
 const UserContacts: React.FC = () => {
     const [contacts, setContacts] = useState<any[]>([]);
     const [imageUrls, setImageUrls] = useState<any>({});
+    const [loading, setLoading] = useState<boolean>(true); // Статус загрузки
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -14,19 +16,26 @@ const UserContacts: React.FC = () => {
             return;
         }
 
-        fetch('http://localhost:8080/messages/contacts', {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-            },
-        })
-            .then(response => response.json())
-            .then(data => {
+        const fetchContacts = async () => {
+            try {
+                const response = await fetch('http://localhost:8080/messages/contacts', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                    },
+                });
+
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+
+                const data = await response.json();
                 setContacts(data);
+
                 // Fetch profile images for each contact
-                data.forEach((contact: any) => {
+                const imageFetchPromises = data.map((contact: any) => {
                     const imageUrl = `http://localhost:8080/images/${contact.username}`;
-                    fetch(imageUrl)
+                    return fetch(imageUrl)
                         .then(response => response.blob())
                         .then(imageBlob => {
                             const imageObjectURL = URL.createObjectURL(imageBlob);
@@ -37,10 +46,16 @@ const UserContacts: React.FC = () => {
                         })
                         .catch(error => console.error('Ошибка загрузки изображения:', error));
                 });
-            })
-            .catch(error => {
+
+                await Promise.all(imageFetchPromises); // Ждем загрузки всех изображений
+            } catch (error) {
                 console.error('Ошибка:', error);
-            });
+            } finally {
+                setLoading(false); // Отключаем индикатор загрузки
+            }
+        };
+
+        fetchContacts();
     }, [navigate]);
 
     const handleChatClick = (contactUsername: string, contactId: number) => {
@@ -49,6 +64,10 @@ const UserContacts: React.FC = () => {
         localStorage.setItem('contactId', contactId.toString()); // Добавляем contactId
         navigate('/messages');
     };
+
+    if (loading) {
+        return <LoadingIndicator />; // Отображение индикатора загрузки
+    }
 
     return (
         <div className="user-contacts-container">

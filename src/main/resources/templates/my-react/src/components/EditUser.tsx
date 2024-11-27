@@ -1,8 +1,8 @@
-// src/components/EditUser.tsx
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './EditUser.css';
-import {FiArrowLeft} from "react-icons/fi";
+import { FiArrowLeft } from "react-icons/fi";
+import LoadingIndicator from './LoadingInficator'; // Импортируем компонент индикатора загрузки
 
 const EditUser: React.FC = () => {
     const [firstname, setFirstname] = useState<string>('');
@@ -12,6 +12,7 @@ const EditUser: React.FC = () => {
     const [errorMessage, setErrorMessage] = useState<string>('');
     const [username, setUsername] = useState<string>('');
     const [password, setPassword] = useState<string>('');
+    const [loading, setLoading] = useState<boolean>(true); // Статус загрузки
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -20,6 +21,8 @@ const EditUser: React.FC = () => {
             navigate('/login');
             return;
         }
+
+        setLoading(true); // Включаем индикатор загрузки при старте
 
         fetch('http://localhost:8080/showUserInfo', {
             method: 'GET',
@@ -35,10 +38,12 @@ const EditUser: React.FC = () => {
                 setDescription(data.description || '');
                 setUsername(data.username);
                 setPassword(data.password);
+                setLoading(false); // Отключаем индикатор загрузки после получения данных
             })
             .catch(error => {
                 console.error('Ошибка:', error);
                 setErrorMessage('Ошибка при загрузке данных пользователя.');
+                setLoading(false); // Отключаем индикатор загрузки в случае ошибки
             });
     }, [navigate]);
 
@@ -84,56 +89,62 @@ const EditUser: React.FC = () => {
     return (
         <div className="form-container">
             <button className="back-buttonS" onClick={() => navigate('/user-info')}>
-                <FiArrowLeft size={20} color="blue"/>
+                <FiArrowLeft size={20} color="blue" />
             </button>
             <h2>Редактирование профиля</h2>
-            <form id="editUserForm" onSubmit={handleSubmit}>
-                <div className="form-group">
-                    <label htmlFor="firstname">Имя:</label>
-                    <input
-                        type="text"
-                        id="firstname"
-                        name="firstname"
-                        value={firstname}
-                        onChange={(e) => setFirstname(e.target.value)}
-                        required
-                    />
-                </div>
-                <div className="form-group">
-                    <label htmlFor="lastname">Фамилия:</label>
-                    <input
-                        type="text"
-                        id="lastname"
-                        name="lastname"
-                        value={lastname}
-                        onChange={(e) => setLastname(e.target.value)}
-                        required
-                    />
-                </div>
-                <div className="form-group">
-                    <label htmlFor="yearOfBirth">Год рождения:</label>
-                    <input
-                        type="number"
-                        id="yearOfBirth"
-                        name="yearOfBirth"
-                        value={yearOfBirth}
-                        onChange={(e) => setYearOfBirth(e.target.value)}
-                        required
-                    />
-                </div>
-                <div className="form-group">
-                    <label htmlFor="description">О себе:</label>
-                    <textarea
-                        id="description"
-                        name="description"
-                        value={description}
-                        onChange={(e) => setDescription(e.target.value)}
-                        required
-                    />
-                </div>
-                <button type="submit">Сохранить изменения</button>
-                {errorMessage && <p className="error-message">{errorMessage}</p>}
-            </form>
+
+            {/* Показать индикатор загрузки, если данные все еще загружаются */}
+            {loading ? (
+                <LoadingIndicator />
+            ) : (
+                <form id="editUserForm" onSubmit={handleSubmit}>
+                    <div className="form-group">
+                        <label htmlFor="firstname">Имя:</label>
+                        <input
+                            type="text"
+                            id="firstname"
+                            name="firstname"
+                            value={firstname}
+                            onChange={(e) => setFirstname(e.target.value)}
+                            required
+                        />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="lastname">Фамилия:</label>
+                        <input
+                            type="text"
+                            id="lastname"
+                            name="lastname"
+                            value={lastname}
+                            onChange={(e) => setLastname(e.target.value)}
+                            required
+                        />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="yearOfBirth">Год рождения:</label>
+                        <input
+                            type="number"
+                            id="yearOfBirth"
+                            name="yearOfBirth"
+                            value={yearOfBirth}
+                            onChange={(e) => setYearOfBirth(e.target.value)}
+                            required
+                        />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="description">О себе:</label>
+                        <textarea
+                            id="description"
+                            name="description"
+                            value={description}
+                            onChange={(e) => setDescription(e.target.value)}
+                            required
+                        />
+                    </div>
+                    <button type="submit">Сохранить изменения</button>
+                    {errorMessage && <p className="error-message">{errorMessage}</p>}
+                </form>
+            )}
         </div>
     );
 };

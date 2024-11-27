@@ -2,6 +2,8 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './Login.css';
+import LoadingIndicator from './LoadingInficator';
+
 
 const Login: React.FC = () => {
     const [username, setUsername] = useState<string>('');
