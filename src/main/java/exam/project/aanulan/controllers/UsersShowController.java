@@ -11,6 +11,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.Collections;
@@ -47,5 +48,22 @@ public class UsersShowController {
         return ResponseEntity.ok(Map.of(
                 "myUsers", myAllUsers));
 
+    }
+
+    // Новый метод для получения id пользователя по его username
+    @GetMapping("/id/{username}")
+    public ResponseEntity<?> getUserIdByUsername(@PathVariable("username") String username) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Пользователь не аутентифицирован");
+        }
+
+        // Получаем данные о пользователе по его username
+        Person user = personService.findByUsername(username);
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Пользователь не найден");
+        }
+
+        return ResponseEntity.ok(Map.of("id", user.getId())); // Отправляем id пользователя
     }
 }

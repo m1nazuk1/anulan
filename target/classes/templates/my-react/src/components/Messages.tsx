@@ -1,5 +1,7 @@
-import React, { useEffect, useState, ChangeEvent, KeyboardEvent, useRef } from 'react';
+import React, { useState, useEffect, useRef, ChangeEvent, KeyboardEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { FiArrowLeft } from 'react-icons/fi'; // Импортируем иконку стрелки назад
+import { FiTrash2 } from 'react-icons/fi';
 import './Messages.css';
 
 interface Message {
@@ -22,35 +24,37 @@ const Messages: React.FC = () => {
     const messageListRef = useRef<HTMLDivElement | null>(null);
     const navigate = useNavigate();
 
-    // Загружаем данные пользователя и контакта
     const fetchUserData = async () => {
+        const jwtToken = localStorage.getItem('jwt-token');
+        if (!jwtToken) {
+            navigate('/login');
+            return;
+        }
+
         try {
             const response = await fetch('http://localhost:8080/messages/ids', {
                 method: 'GET',
                 headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('jwt-token')}`,
+                    'Authorization': `Bearer ${jwtToken}`,
                 },
             });
 
             if (!response.ok) {
-                throw new Error('Ошибка получения данных пользователя и контакта');
+                throw new Error('Ошибка получения данных пользователя');
             }
 
             const data = await response.json();
             setUserId(data.userId);
-            setContactId(data.contactId);
         } catch (error) {
             console.error('Ошибка:', error);
         }
     };
 
-    // Функция загрузки сообщений
     const fetchMessages = (userId: number, contactId: number) => {
         fetch(`http://localhost:8080/messages/${userId}/${contactId}`, {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${localStorage.getItem('jwt-token')}`,
-                'Cache-Control': 'no-cache',
             },
         })
             .then((response) => {
@@ -61,17 +65,29 @@ const Messages: React.FC = () => {
             })
             .then((data) => {
                 setMessages(data);
-                scrollToBottom(); // Скроллим вниз
+                scrollToBottom();
             })
             .catch((error) => console.error('Ошибка:', error));
     };
 
-    // Изменение текста в поле ввода
-    const handleMessageChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
-        setMessageText(event.target.value);
+    const handleDeleteMessage = (messageId: number) => {
+        fetch(`http://localhost:8080/messages/delete/${messageId}`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('jwt-token')}`,
+            },
+        })
+            .then((response) => {
+                if (response.ok) {
+                    setMessages(prevMessages => prevMessages.filter(message => message.id !== messageId));
+                } else {
+                    console.error('Ошибка удаления сообщения');
+                }
+            })
+            .catch((error) => console.error('Ошибка:', error));
     };
 
-    // Отправка сообщения
+
     const sendMessage = () => {
         if (!messageText.trim() || !userId || !contactId) return;
 
@@ -86,7 +102,6 @@ const Messages: React.FC = () => {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${localStorage.getItem('jwt-token')}`,
-                'Cache-Control': 'no-cache',
             },
             body: JSON.stringify(messageData),
         })
@@ -95,12 +110,15 @@ const Messages: React.FC = () => {
                     throw new Error('Ошибка отправки сообщения');
                 }
                 setMessageText('');
-                fetchMessages(userId, contactId); // Обновляем сообщения
+                fetchMessages(userId, contactId); // Обновляем список сообщений после отправки
             })
             .catch((error) => console.error('Ошибка:', error));
     };
 
-    // Отправка при нажатии Enter
+    const handleMessageChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
+        setMessageText(event.target.value);
+    };
+
     const handleKeyDown = (event: KeyboardEvent<HTMLTextAreaElement>) => {
         if (event.key === 'Enter' && !event.shiftKey) {
             event.preventDefault();
@@ -108,7 +126,6 @@ const Messages: React.FC = () => {
         }
     };
 
-    // Скроллинг вниз
     const scrollToBottom = () => {
         if (messageListRef.current) {
             messageListRef.current.scrollTop = messageListRef.current.scrollHeight;
@@ -116,7 +133,13 @@ const Messages: React.FC = () => {
     };
 
     useEffect(() => {
-        fetchUserData();
+        const savedContactId = localStorage.getItem('contactId');
+        if (savedContactId) {
+            setContactId(Number(savedContactId));
+            fetchUserData();
+        } else {
+            navigate('/user-contacts');
+        }
     }, []);
 
     useEffect(() => {
@@ -134,20 +157,29 @@ const Messages: React.FC = () => {
             <div className="header">
                 <h1 className="brand-name">anulan</h1>
                 <nav className="navigation">
-                    <button onClick={() => navigate('/messages')}>Сообщения</button>
+                    <button onClick={() => navigate('/user-contacts')}>Сообщения</button>
                     <button onClick={() => navigate('/users')}>Пользователи</button>
                     <button onClick={() => navigate('/user-info')}>Моя страница</button>
                 </nav>
             </div>
+            {/* Кнопка стрелки назад */}
+            <button className="back-button" onClick={() => navigate('/user-contacts')}>
+                <FiArrowLeft size={20} color="blue"/>
+            </button>
             <div className="chat-container">
+
                 <div ref={messageListRef} className="message-list">
                     {messages.map((message, index) => {
                         const isCurrentUserSender = message.senderName === localStorage.getItem("currentUserName");
 
                         return (
-                            <div key={message.id || index} className={`message ${isCurrentUserSender ? 'sent' : 'received'}`}>
+                            <div key={message.id || index}
+                                 className={`message ${isCurrentUserSender ? 'sent' : 'received'}`}>
                                 <div className="message-content">{message.content}</div>
                                 <div className="message-time">{new Date(message.sendTime).toLocaleString()}</div>
+                                <div className="delete-icon" onClick={() => handleDeleteMessage(message.id)}>
+                                    <FiTrash2 size={16} color="red"/>
+                                </div>
                             </div>
                         );
                     })}

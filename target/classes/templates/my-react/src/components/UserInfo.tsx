@@ -23,6 +23,7 @@ const UserInfo: React.FC = () => {
             .then(response => response.json())
             .then(data => {
                 setUserInfo(data);
+                localStorage.setItem("currentUserName", data.firstname);
                 const userImageUrl = `http://localhost:8080/images/${data.username}`;
                 setImageUrl(userImageUrl);
             })
@@ -30,7 +31,9 @@ const UserInfo: React.FC = () => {
                 console.error('Ошибка:', error);
                 setUserInfo(null);
             });
+
     }, [navigate]);
+
 
     const handleLogout = () => {
         localStorage.removeItem('jwt-token');
@@ -45,12 +48,13 @@ const UserInfo: React.FC = () => {
         navigate('/edit-photo');
     };
 
+
     return (
         <div className="user-info-container">
             <div className="header">
                 <h1 className="brand-name">anulan</h1>
                 <nav className="navigation">
-                    <button onClick={() => navigate('/messages')}>Сообщения</button>
+                    <button onClick={() => navigate('/user-contacts')}>Сообщения</button>
                     <button onClick={() => navigate('/users')}>Пользователи</button>
                     <button onClick={() => navigate('/user-info')}>Моя страница</button>
                 </nav>

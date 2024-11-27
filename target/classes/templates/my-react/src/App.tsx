@@ -8,6 +8,7 @@ import EditUser from "./components/EditUser";
 import EditPhoto from "./components/EditPhoto";
 import Users from "./components/Users";
 import Messages from "./components/Messages";
+import UserContacts from "./components/UserContacts";
 
 const App: React.FC = () => {
     return (
@@ -22,6 +23,7 @@ const App: React.FC = () => {
                 <Route path="/edit-photo" element={<EditPhoto />} />
                 <Route path="/users" element={<Users />} />
                 <Route path="/messages" element={<Messages />} />
+                <Route path="/user-contacts" element={<UserContacts />} />
             </Routes>
         </Router>
     );

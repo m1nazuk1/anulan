@@ -42,6 +42,7 @@
     word-wrap: break-word;
     margin-bottom: 10px;
     animation: fadeIn 0.3s ease-in-out;
+    position: relative;
 }
 
 /* Сообщение от текущего пользователя (справа) */
@@ -154,3 +155,103 @@
         transform: translateY(0);
     }
 }
+
+
+/* Стили для кнопки стрелки назад */
+.back-button {
+    background: none;  /* Убираем фон */
+    border: none;  /* Убираем рамку */
+    padding: 5px;  /* Маленькие отступы для уменьшения кнопки */
+    cursor: pointer;
+    position: absolute;
+    top: 220px;  /* Расположение кнопки от верхнего края контейнера */
+    left: -240px;  /* Расположение кнопки от левого края контейнера */
+    z-index: 10; /* Убедитесь, что кнопка находится поверх других элементов */
+    outline: none; /* Убираем контур */
+    box-shadow: none; /* Убираем тень, которая может появляться */
+}
+
+.back-button svg {
+    width: 30px;  /* Размер стрелки */
+    height: 30px;  /* Размер стрелки */
+    color: white;  /* Белый цвет стрелки */
+}
+
+/* Убираем фоновый цвет на hover */
+.back-button:hover {
+    opacity: 0.8; /* Эффект при наведении */
+    background: none;  /* Убираем фон */
+    box-shadow: none; /* Убираем тень */
+}
+
+/* Убираем фон и подчеркивание при фокусе */
+.back-button:focus {
+    outline: none;
+    background: none;
+    box-shadow: none; /* Убираем тень */
+}
+
+/* Убираем дефолтное поведение кнопки */
+button {
+    -webkit-appearance: none;  /* Убираем дефолтный стиль кнопки в WebKit-браузерах */
+    -moz-appearance: none;  /* Убираем дефолтный стиль кнопки в Firefox */
+    appearance: none;  /* Убираем дефолтный стиль кнопки */
+}
+
+
+.delete-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 10;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+/* Для кнопки мусорной корзины при наведении */
+.message:hover .delete-button {
+    opacity: 1;
+}
+/* Анимация распада сообщения */
+@keyframes crumble {
+    0% {
+        transform: scale(1) rotate(0deg);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(0.5) rotate(30deg);
+        opacity: 0.5;
+    }
+    100% {
+        transform: scale(0) rotate(60deg);
+        opacity: 0;
+    }
+}
+
+.message.delete {
+    animation: crumble 0.5s forwards; /* Длительность совпадает с таймаутом */
+}
+
+/* Кнопка отправки с иконкой стрелки */
+.send-button {
+    background-color: #42a5f5;
+    color: white;
+    border: none;
+    border-radius: 25px;
+    padding: 12px 20px;
+    cursor: pointer;
+    height: 60px;
+    width: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background-color 0.3s ease;
+}
+
+.send-button:hover {
+    background-color: #1e88e5;
+}
+
