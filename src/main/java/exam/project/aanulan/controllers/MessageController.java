@@ -66,6 +66,28 @@ public class MessageController {
         // Возвращаем список пользователей
         return ResponseEntity.ok(contacts);
     }
+
+    @DeleteMapping("/delete/{messageId}")
+    public ResponseEntity<?> deleteMessage(@PathVariable int messageId) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Person currentUser = personDetailsService.loadPersonByUsername(((PersonDetails) authentication.getPrincipal()).getUsername());
+
+        // Находим сообщение по ID
+        Message message = messageRepository.findById(messageId).orElse(null);
+        if (message == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Сообщение не найдено");
+        }
+
+        // Проверяем, что пользователь является отправителем или получателем
+        if (message.getSender().getId() != currentUser.getId() && message.getReceiver().getId() != currentUser.getId()) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Нет прав на удаление этого сообщения");
+        }
+
+        // Удаляем сообщение
+        messageRepository.delete(message);
+
+        return ResponseEntity.ok("Сообщение успешно удалено");
+    }
     /**
      * Получение ID текущего пользователя и выбранного контакта.
      */
