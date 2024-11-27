@@ -3,34 +3,61 @@ package exam.project.aanulan.models;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-
 @Entity
 public class Message {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
+
     @ManyToOne
-    @JoinColumn(name = "sender_id", nullable = false)
+    @JoinColumn(name = "sender_id")
     private Person sender;
+    @Column(name = "sender_name")
+    private String senderName;
 
     @ManyToOne
-    @JoinColumn(name = "chat_id", nullable = false)
-    private Chat chat;
+    @JoinColumn(name = "receiver_id")
+    private Person receiver;
 
-    @Column(nullable = false)
     private String content;
+    @Column(name = "receiver_name")
+    private String receiverName;
 
-    @Column(nullable = false)
-    private LocalDateTime timestamp;
+    private String testMessage;
 
-    // Getters and setters
+    private LocalDateTime sendTime;
+
     public int getId() {
         return id;
     }
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getTestMessage() {
+        return testMessage;
+    }
+
+    public void setTestMessage(String testMessage) {
+        this.testMessage = testMessage;
+    }
+
+    public String getSenderName() {
+        return senderName;
+    }
+    public String getReceiverName() {
+        return receiverName;
+    }
+
+
+    public void setReceiverName(String receiverName) {
+        this.receiverName = receiverName;
+    }
+
+    public void setSenderName(String senderName) {
+        this.senderName = senderName;
     }
 
     public Person getSender() {
@@ -41,12 +68,12 @@ public class Message {
         this.sender = sender;
     }
 
-    public Chat getChat() {
-        return chat;
+    public Person getReceiver() {
+        return receiver;
     }
 
-    public void setChat(Chat chat) {
-        this.chat = chat;
+    public void setReceiver(Person receiver) {
+        this.receiver = receiver;
     }
 
     public String getContent() {
@@ -57,11 +84,13 @@ public class Message {
         this.content = content;
     }
 
-    public LocalDateTime getTimestamp() {
-        return timestamp;
+    public LocalDateTime getSendTime() {
+        return sendTime;
     }
 
-    public void setTimestamp(LocalDateTime timestamp) {
-        this.timestamp = timestamp;
+    public void setSendTime(LocalDateTime sendTime) {
+        this.sendTime = sendTime;
     }
+
+
 }

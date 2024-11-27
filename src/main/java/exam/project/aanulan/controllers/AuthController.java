@@ -1,5 +1,6 @@
 package exam.project.aanulan.controllers;
 
+import com.auth0.jwt.exceptions.JWTVerificationException;
 import exam.project.aanulan.dto.AuthenticationDTO;
 import exam.project.aanulan.dto.PersonDTO;
 import exam.project.aanulan.models.Person;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.util.Map;
@@ -112,6 +114,25 @@ public class AuthController {
         String token = jwtUtil.generateToken(authenticationDTO.getUsername());
         System.out.println(token);
         return Map.of("jwt-token", token);
+    }
+
+    // Новый endpoint для получения текущего пользователя
+    @GetMapping("/current-user")
+    public ResponseEntity<?> getCurrentUser(HttpServletRequest request) {
+        String authHeader = request.getHeader("Authorization");
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            String jwt = authHeader.substring(7); // Убираем префикс "Bearer "
+            if (!jwt.isBlank()) {
+                try {
+                    String username = jwtUtil.validateTokenAndRetrieveClaim(jwt);
+                    Person person = personDetailsService.loadPersonByUsername(username);
+                    return ResponseEntity.ok(person);
+                } catch (JWTVerificationException e) {
+                    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid JWT Token");
+                }
+            }
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized");
     }
 
     public Person convertToPerson(PersonDTO personDTO) {

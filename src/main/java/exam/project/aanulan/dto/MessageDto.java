@@ -30,7 +30,7 @@ public class MessageDto {
         this.senderId = senderId;
     }
 
-    public int getReceiverId() {
+    public Integer getReceiverId() {
         return receiverId;
     }
 
