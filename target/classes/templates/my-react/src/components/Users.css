@@ -1,5 +1,3 @@
-/* src/components/Users.css */
-
 /* Основные стили страницы */
 body {
     font-family: 'Arial', sans-serif;
@@ -17,10 +15,10 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 200px;
-
+    margin-top: 200px; /* Добавляем отступ для шапки */
 }
 
+/* Название бренда */
 .brand-name {
     color: #007bff;
     font-size: 50px;
@@ -81,7 +79,7 @@ body {
     justify-content: center;
     flex-wrap: wrap;
     gap: 20px;
-    margin-top: 30px;
+    margin-top: 30px; /* Отступ от строки поиска */
 }
 
 /* Карточка пользователя */

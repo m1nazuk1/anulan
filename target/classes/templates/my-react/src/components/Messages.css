@@ -1,16 +1,25 @@
+.headerZ {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 40px;
+
+}
+
+
 /* Основной контейнер чата */
 .chat-container {
     display: flex;
     flex-direction: column;
     margin: 0 auto;
     width: 90%; /* Ширина чата 90% экрана */
-    max-width: 1200px; /* Максимальная ширина */
+    max-width: 410px; /* Максимальная ширина */
     background-color: #ffffff;
     border-radius: 12px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     overflow: hidden;
     border: 1px solid #e0e0e0;
-    height: 85vh; /* Высота чата — почти на пол экрана */
+    height: 75vh; /* Высота чата — почти на пол экрана */
     margin-top: 20px; /* Отступ сверху */
     margin-bottom: 20px; /* Отступ снизу */
     display: flex;
@@ -21,13 +30,13 @@
 .message-list {
     flex-grow: 1;
     padding: 20px;
-    background-color: #f7f8fa; /* Светлый фон */
-    overflow-y: auto;
+    background-color: #f7f8fa;
+    overflow-y: auto; /* Включаем прокрутку для списка сообщений */
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     gap: 10px;
-    padding-bottom: 80px; /* Увеличиваем пространство снизу, чтобы не перекрывались элементы */
+    padding-bottom: 80px; /* Дополнительное пространство снизу */
 }
 
 /* Сообщения */
@@ -92,9 +101,10 @@
     background-color: #f9f9f9;
     font-family: 'Roboto', sans-serif;
     transition: all 0.2s ease-in-out;
-    max-height: 100px; /* Увеличиваем высоту поля ввода */
+    max-height: 100px; /* Ограничиваем максимальную высоту */
     min-height: 50px; /* Минимальная высота для комфорта */
     resize: none; /* Убираем возможность изменения размера */
+    overflow-y: auto; /* Включаем вертикальную прокрутку */
 }
 
 /* Фокус на поле ввода */
@@ -164,7 +174,7 @@
     padding: 5px;  /* Маленькие отступы для уменьшения кнопки */
     cursor: pointer;
     position: absolute;
-    top: 220px;  /* Расположение кнопки от верхнего края контейнера */
+    top: 190px;  /* Расположение кнопки от верхнего края контейнера */
     left: -240px;  /* Расположение кнопки от левого края контейнера */
     z-index: 10; /* Убедитесь, что кнопка находится поверх других элементов */
     outline: none; /* Убираем контур */
@@ -199,17 +209,59 @@ button {
 }
 
 
-/* Иконка мусорного ведра */
-.delete-icon {
-    position: absolute;
-    top: 5px; /* Расположение иконки от верхнего края */
-    right: 5px; /* Расположение иконки от правого края */
+.delete-button {
+    background: none;
+    border: none;
     cursor: pointer;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 10;
     opacity: 0;
     transition: opacity 0.2s ease;
 }
 
-/* Показать иконку мусорного ведра при наведении на сообщение */
-.message:hover .delete-icon {
+/* Для кнопки мусорной корзины при наведении */
+.message:hover .delete-button {
     opacity: 1;
 }
+/* Анимация распада сообщения */
+@keyframes crumble {
+    0% {
+        transform: scale(1) rotate(0deg);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(0.5) rotate(30deg);
+        opacity: 0.5;
+    }
+    100% {
+        transform: scale(0) rotate(60deg);
+        opacity: 0;
+    }
+}
+
+.message.delete {
+    animation: crumble 0.5s forwards; /* Длительность совпадает с таймаутом */
+}
+
+/* Кнопка отправки с иконкой стрелки */
+.send-button {
+    background-color: #42a5f5;
+    color: white;
+    border: none;
+    border-radius: 25px;
+    padding: 12px 20px;
+    cursor: pointer;
+    height: 60px;
+    width: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background-color 0.3s ease;
+}
+
+.send-button:hover {
+    background-color: #1e88e5;
+}
+

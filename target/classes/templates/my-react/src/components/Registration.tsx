@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './Registration.css';
+import LoadingIndicator from './LoadingInficator';
+
 
 const Registration: React.FC = () => {
     const [username, setUsername] = useState<string>('');

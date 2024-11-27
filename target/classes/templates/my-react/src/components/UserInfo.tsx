@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './UserInfo.css';
+import LoadingIndicator from './LoadingInficator';
 
 const UserInfo: React.FC = () => {
     const [userInfo, setUserInfo] = useState<any>(null);
     const [imageUrl, setImageUrl] = useState<string>('');
     const navigate = useNavigate();
+    const [loading, setLoading] = useState<boolean>(true); // Статус загрузки
 
     useEffect(() => {
         const token = localStorage.getItem('jwt-token');
@@ -14,26 +16,38 @@ const UserInfo: React.FC = () => {
             return;
         }
 
-        fetch('http://localhost:8080/showUserInfo', {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-            },
-        })
-            .then(response => response.json())
-            .then(data => {
+        const fetchUserInfo = async () => {
+            try {
+                const response = await fetch('http://localhost:8080/showUserInfo', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                    },
+                });
+
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+
+                const data = await response.json();
                 setUserInfo(data);
                 localStorage.setItem("currentUserName", data.firstname);
                 const userImageUrl = `http://localhost:8080/images/${data.username}`;
                 setImageUrl(userImageUrl);
-            })
-            .catch(error => {
+            } catch (error) {
                 console.error('Ошибка:', error);
                 setUserInfo(null);
-            });
+            } finally {
+                setLoading(false); // Отключаем индикатор загрузки
+            }
+        };
 
+        fetchUserInfo();
     }, [navigate]);
 
+    if (loading) {
+        return <LoadingIndicator />;
+    }
 
     const handleLogout = () => {
         localStorage.removeItem('jwt-token');
@@ -47,7 +61,6 @@ const UserInfo: React.FC = () => {
     const handleEditPhoto = () => {
         navigate('/edit-photo');
     };
-
 
     return (
         <div className="user-info-container">
@@ -76,7 +89,7 @@ const UserInfo: React.FC = () => {
                     </div>
                 </div>
             ) : (
-                <p>Загрузка...</p>
+                <p>Данные пользователя не найдены</p>
             )}
         </div>
     );

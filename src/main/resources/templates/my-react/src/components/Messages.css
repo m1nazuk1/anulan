@@ -13,7 +13,7 @@
     flex-direction: column;
     margin: 0 auto;
     width: 90%; /* Ширина чата 90% экрана */
-    max-width: 1200px; /* Максимальная ширина */
+    max-width: 410px; /* Максимальная ширина */
     background-color: #ffffff;
     border-radius: 12px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
@@ -30,13 +30,13 @@
 .message-list {
     flex-grow: 1;
     padding: 20px;
-    background-color: #f7f8fa; /* Светлый фон */
-    overflow-y: auto;
+    background-color: #f7f8fa;
+    overflow-y: auto; /* Включаем прокрутку для списка сообщений */
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     gap: 10px;
-    padding-bottom: 80px; /* Увеличиваем пространство снизу, чтобы не перекрывались элементы */
+    padding-bottom: 80px; /* Дополнительное пространство снизу */
 }
 
 /* Сообщения */
@@ -101,9 +101,10 @@
     background-color: #f9f9f9;
     font-family: 'Roboto', sans-serif;
     transition: all 0.2s ease-in-out;
-    max-height: 100px; /* Увеличиваем высоту поля ввода */
+    max-height: 100px; /* Ограничиваем максимальную высоту */
     min-height: 50px; /* Минимальная высота для комфорта */
     resize: none; /* Убираем возможность изменения размера */
+    overflow-y: auto; /* Включаем вертикальную прокрутку */
 }
 
 /* Фокус на поле ввода */

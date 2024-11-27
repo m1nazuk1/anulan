@@ -4,26 +4,54 @@ import exam.project.aanulan.models.Image;
 import exam.project.aanulan.models.Person;
 import exam.project.aanulan.repositories.ImagesRepository;
 import exam.project.aanulan.repositories.PeopleRepository;
+import exam.project.aanulan.security.PersonDetails;
+import exam.project.aanulan.services.PersonDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.ByteArrayInputStream;
+import java.util.Map;
 import java.util.Optional;
 
 @Controller
 public class ImageController {
     private final ImagesRepository imagesRepository;
     private final PeopleRepository peopleRepository;
+    private final PersonDetailsService personDetailsService;
+
     @Autowired
-    public ImageController(ImagesRepository imagesRepository, PeopleRepository peopleRepository) {
+    public ImageController(ImagesRepository imagesRepository, PeopleRepository peopleRepository, PersonDetailsService personDetailsService) {
         this.imagesRepository = imagesRepository;
         this.peopleRepository = peopleRepository;
+        this.personDetailsService = personDetailsService;
+    }
+
+    @Transactional
+    @PutMapping("/removeImage")
+    public ResponseEntity<?> removeImage() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Пользователь не аутентифицирован");
+        }
+
+        Person person = personDetailsService.loadPersonByUsername(((PersonDetails) authentication.getPrincipal()).getUsername());
+
+        // Устанавливаем изображение с ID = 1
+        person.setPreviewImageId(1); // ID изображения с ID = 1
+        peopleRepository.save(person);
+
+        return ResponseEntity.ok(Map.of("message", "Аватар успешно удален, установлен дефолтный аватар"));
     }
 
     @GetMapping("/images/{username}")

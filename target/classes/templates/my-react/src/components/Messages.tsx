@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef, ChangeEvent, KeyboardEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FiArrowLeft } from 'react-icons/fi'; // Импортируем иконку стрелки назад
+import { FiArrowLeft, FiSend } from 'react-icons/fi'; // Импортируем иконку стрелки назад
 import { FiTrash2 } from 'react-icons/fi';
 import './Messages.css';
+import LoadingIndicator from './LoadingInficator';
 
 interface Message {
     id: number;
@@ -14,6 +15,7 @@ interface Message {
         id: number;
         username: string;
     };
+    isDeleting?: boolean;
 }
 
 const Messages: React.FC = () => {
@@ -21,6 +23,7 @@ const Messages: React.FC = () => {
     const [contactId, setContactId] = useState<number | null>(null);
     const [messages, setMessages] = useState<Message[]>([]);
     const [messageText, setMessageText] = useState<string>('');
+    const [loading, setLoading] = useState<boolean>(true); // Статус загрузки
     const messageListRef = useRef<HTMLDivElement | null>(null);
     const navigate = useNavigate();
 
@@ -51,6 +54,7 @@ const Messages: React.FC = () => {
     };
 
     const fetchMessages = (userId: number, contactId: number) => {
+        setLoading(true); // Включаем индикатор загрузки
         fetch(`http://localhost:8080/messages/${userId}/${contactId}`, {
             method: 'GET',
             headers: {
@@ -65,28 +69,14 @@ const Messages: React.FC = () => {
             })
             .then((data) => {
                 setMessages(data);
+                setLoading(false); // Отключаем индикатор загрузки
                 scrollToBottom();
             })
-            .catch((error) => console.error('Ошибка:', error));
+            .catch((error) => {
+                setLoading(false); // Отключаем индикатор загрузки в случае ошибки
+                console.error('Ошибка:', error);
+            });
     };
-
-    const handleDeleteMessage = (messageId: number) => {
-        fetch(`http://localhost:8080/messages/delete/${messageId}`, {
-            method: 'DELETE',
-            headers: {
-                'Authorization': `Bearer ${localStorage.getItem('jwt-token')}`,
-            },
-        })
-            .then((response) => {
-                if (response.ok) {
-                    setMessages(prevMessages => prevMessages.filter(message => message.id !== messageId));
-                } else {
-                    console.error('Ошибка удаления сообщения');
-                }
-            })
-            .catch((error) => console.error('Ошибка:', error));
-    };
-
 
     const sendMessage = () => {
         if (!messageText.trim() || !userId || !contactId) return;
@@ -152,9 +142,35 @@ const Messages: React.FC = () => {
         scrollToBottom();
     }, [messages]);
 
+    const handleDeleteMessage = (messageId: number) => {
+        fetch(`http://localhost:8080/messages/delete/${messageId}`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('jwt-token')}`,
+            },
+        })
+            .then((response) => {
+                if (response.ok) {
+                    // Помечаем сообщение для анимации
+                    const updatedMessages = messages.map(message =>
+                        message.id === messageId ? { ...message, isDeleting: true } : message
+                    );
+                    setMessages(updatedMessages);
+
+                    // Удаляем сообщение из состояния после завершения анимации
+                    setTimeout(() => {
+                        setMessages(prevMessages => prevMessages.filter(message => message.id !== messageId));
+                    }, 500); // Время анимации crumble
+                } else {
+                    console.error('Ошибка удаления сообщения');
+                }
+            })
+            .catch((error) => console.error('Ошибка:', error));
+    };
+
     return (
         <div className="chat-wrapper">
-            <div className="header">
+            <div className="headerZ">
                 <h1 className="brand-name">anulan</h1>
                 <nav className="navigation">
                     <button onClick={() => navigate('/user-contacts')}>Сообщения</button>
@@ -164,37 +180,45 @@ const Messages: React.FC = () => {
             </div>
             {/* Кнопка стрелки назад */}
             <button className="back-button" onClick={() => navigate('/user-contacts')}>
-                <FiArrowLeft size={20} color="blue"/>
+                <FiArrowLeft size={20} color="blue" />
             </button>
             <div className="chat-container">
+                {loading ? (
+                    <LoadingIndicator /> // Показываем индикатор загрузки, если данные еще загружаются
+                ) : (
+                    <>
+                        <div ref={messageListRef} className="message-list">
+                            {messages.map((message, index) => {
+                                const isCurrentUserSender = message.senderName === localStorage.getItem("currentUserName");
 
-                <div ref={messageListRef} className="message-list">
-                    {messages.map((message, index) => {
-                        const isCurrentUserSender = message.senderName === localStorage.getItem("currentUserName");
+                                return (
+                                    <div key={message.id || index}
+                                         className={`message ${isCurrentUserSender ? 'sent' : 'received'} ${message.isDeleting ? 'delete' : ''}`}>
+                                        <div className="message-content">{message.content}</div>
+                                        <div className="message-time">{new Date(message.sendTime).toLocaleString()}</div>
 
-                        return (
-                            <div key={message.id || index}
-                                 className={`message ${isCurrentUserSender ? 'sent' : 'received'}`}>
-                                <div className="message-content">{message.content}</div>
-                                <div className="message-time">{new Date(message.sendTime).toLocaleString()}</div>
-                                <div className="delete-icon" onClick={() => handleDeleteMessage(message.id)}>
-                                    <FiTrash2 size={16} color="red"/>
-                                </div>
-                            </div>
-                        );
-                    })}
-                </div>
-
-                <div className="input-container">
-                    <textarea
-                        className="message-input"
-                        value={messageText}
-                        onChange={handleMessageChange}
-                        onKeyDown={handleKeyDown}
-                        placeholder="Введите сообщение"
-                    />
-                    <button className="send-button" onClick={sendMessage}></button>
-                </div>
+                                        <div className="delete-button" onClick={() => handleDeleteMessage(message.id)}>
+                                            <FiTrash2 size={16} color="red" />
+                                        </div>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                        <div className="input-container">
+                            <textarea
+                                className="message-input"
+                                value={messageText}
+                                onChange={handleMessageChange}
+                                onKeyDown={handleKeyDown}
+                                placeholder="Введите сообщение"
+                            />
+                            {/* Кнопка отправки с иконкой стрелки */}
+                            <button className="send-button" onClick={sendMessage}>
+                                <FiSend size={40} color="white" />
+                            </button>
+                        </div>
+                    </>
+                )}
             </div>
         </div>
     );

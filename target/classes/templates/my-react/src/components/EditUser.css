@@ -120,3 +120,37 @@ button[type="submit"]:active {
         font-size: 24px;
     }
 }
+
+
+.back-buttonS {
+    background: none;  /* Убираем фон */
+    border: none;  /* Убираем рамку */
+    padding: 5px;  /* Маленькие отступы для уменьшения кнопки */
+    cursor: pointer;
+    position: relative;
+    top: 100px;  /* Расположение кнопки от верхнего края контейнера */
+    left: -290px;  /* Расположение кнопки от левого края контейнера */
+    z-index: 10; /* Убедитесь, что кнопка находится поверх других элементов */
+    outline: none; /* Убираем контур */
+    box-shadow: none; /* Убираем тень, которая может появляться */
+}
+
+.back-buttonS svg {
+    width: 30px;  /* Размер стрелки */
+    height: 30px;  /* Размер стрелки */
+    color: white;  /* Белый цвет стрелки */
+}
+
+/* Убираем фоновый цвет на hover */
+.back-buttonS:hover {
+    opacity: 0.8; /* Эффект при наведении */
+    background: none;  /* Убираем фон */
+    box-shadow: none; /* Убираем тень */
+}
+
+/* Убираем фон и подчеркивание при фокусе */
+.back-buttonS:focus {
+    outline: none;
+    background: none;
+    box-shadow: none; /* Убираем тень */
+}
