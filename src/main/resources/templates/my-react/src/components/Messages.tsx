@@ -164,7 +164,7 @@ const Messages: React.FC = () => {
 
     return (
         <div className="chat-wrapper">
-            <div className="header">
+            <div className="headerZ">
                 <h1 className="brand-name">anulan</h1>
                 <nav className="navigation">
                     <button onClick={() => navigate('/user-contacts')}>Сообщения</button>

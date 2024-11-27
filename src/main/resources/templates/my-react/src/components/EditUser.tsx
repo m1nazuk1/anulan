@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './EditUser.css';
+import {FiArrowLeft} from "react-icons/fi";
 
 const EditUser: React.FC = () => {
     const [firstname, setFirstname] = useState<string>('');
@@ -82,6 +83,9 @@ const EditUser: React.FC = () => {
 
     return (
         <div className="form-container">
+            <button className="back-buttonS" onClick={() => navigate('/user-info')}>
+                <FiArrowLeft size={20} color="blue"/>
+            </button>
             <h2>Редактирование профиля</h2>
             <form id="editUserForm" onSubmit={handleSubmit}>
                 <div className="form-group">

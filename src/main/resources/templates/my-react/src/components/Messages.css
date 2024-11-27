@@ -1,3 +1,12 @@
+.headerZ {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 40px;
+
+}
+
+
 /* Основной контейнер чата */
 .chat-container {
     display: flex;
@@ -10,7 +19,7 @@
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     overflow: hidden;
     border: 1px solid #e0e0e0;
-    height: 85vh; /* Высота чата — почти на пол экрана */
+    height: 75vh; /* Высота чата — почти на пол экрана */
     margin-top: 20px; /* Отступ сверху */
     margin-bottom: 20px; /* Отступ снизу */
     display: flex;
@@ -164,7 +173,7 @@
     padding: 5px;  /* Маленькие отступы для уменьшения кнопки */
     cursor: pointer;
     position: absolute;
-    top: 220px;  /* Расположение кнопки от верхнего края контейнера */
+    top: 190px;  /* Расположение кнопки от верхнего края контейнера */
     left: -240px;  /* Расположение кнопки от левого края контейнера */
     z-index: 10; /* Убедитесь, что кнопка находится поверх других элементов */
     outline: none; /* Убираем контур */

@@ -1,7 +1,8 @@
 // src/components/EditPhoto.tsx
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-// import './EditPhoto.css';
+import {FiArrowLeft} from "react-icons/fi";
+import './EditPhoto.css';
 
 const EditPhoto: React.FC = () => {
     const [image, setImage] = useState<File | null>(null);
@@ -72,7 +73,11 @@ const EditPhoto: React.FC = () => {
                 <button type="submit">Изменить!</button>
                 {errorMessage && <p id="errorMessage" className="error-message">{errorMessage}</p>}
             </form>
+            <button className="back-buttonD" onClick={() => navigate('/user-info')}>
+                <FiArrowLeft size={30} color="blue"/>
+            </button>
         </div>
+
     );
 };
 

@@ -53,7 +53,7 @@ const UserContacts: React.FC = () => {
     return (
         <div className="user-contacts-container">
             {/* Шапка с навигационным меню */}
-            <div className="header">
+            <div className="headerS">
                 <h1 className="brand-name">anulan</h1>
                 <nav className="navigation">
                     <button onClick={() => navigate('/user-contacts')}>Сообщения</button>
@@ -63,7 +63,7 @@ const UserContacts: React.FC = () => {
             </div>
 
             <div className="contacts-list">
-                <h2>Ваши сообщения</h2>
+                <h2>Ваши чаты</h2>
                 {contacts.length > 0 ? (
                     <div className="contacts-cards">
                         {contacts.map((contact, index) => (

@@ -1,12 +1,13 @@
-.user-contacts-container {
+.headerS {
+    text-align: center;
     padding: 20px;
+    margin-top: -40px;
 }
 
-.header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+.user-contacts-container {
+    padding: 0 20px;
 }
+
 
 .brand-name {
     font-size: 50px;
