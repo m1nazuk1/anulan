@@ -15,8 +15,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/messages")
@@ -33,6 +35,37 @@ public class MessageController {
         this.personDetailsService = personDetailsService;
     }
 
+
+    /**
+     * Получение списка пользователей, с которыми общался текущий пользователь.
+     */
+    @GetMapping("/contacts")
+    public ResponseEntity<?> getContacts() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Person currentUser = personDetailsService.loadPersonByUsername(((PersonDetails) authentication.getPrincipal()).getUsername());
+
+        // Ищем все сообщения, где текущий пользователь является отправителем или получателем
+        List<Message> messages = messageRepository.findAllMessagesByUserId(currentUser.getId());
+        List<Integer> contactIds = new ArrayList<>();
+
+        for (Message message : messages) {
+            if (message.getSender().getId() != currentUser.getId()) {
+                contactIds.add(message.getSender().getId());
+            }
+            if (message.getReceiver().getId() != currentUser.getId()) {
+                contactIds.add(message.getReceiver().getId());
+            }
+        }
+
+        // Убираем дубли
+        contactIds = contactIds.stream().distinct().collect(Collectors.toList());
+
+        // Получаем пользователей по списку ID
+        List<Person> contacts = personRepository.findAllById(contactIds);
+
+        // Возвращаем список пользователей
+        return ResponseEntity.ok(contacts);
+    }
     /**
      * Получение ID текущего пользователя и выбранного контакта.
      */

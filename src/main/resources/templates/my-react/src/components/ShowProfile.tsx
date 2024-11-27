@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import './UserInfo.css';
 
 const ShowProfile: React.FC = () => {
-    const [userInfo, setUserInfo] = useState<any>(null); // Обновлено на объект
+    const [userInfo, setUserInfo] = useState<any>(null);
     const [userImage, setUserImage] = useState<string>('');
     const [errorMessage, setErrorMessage] = useState<string>('');
     const navigate = useNavigate();
@@ -17,6 +17,7 @@ const ShowProfile: React.FC = () => {
             return;
         }
 
+        // Получаем основную информацию о пользователе
         fetch(`http://localhost:8080/showProfile/${username}`, {
             method: 'GET',
             headers: {
@@ -30,7 +31,7 @@ const ShowProfile: React.FC = () => {
                 return response.json();
             })
             .then((data) => {
-                setUserInfo(data);  // Обновлено на использование объекта с данными
+                setUserInfo(data);
                 const imageUrl = `http://localhost:8080/images/${data.username}`;
                 fetch(imageUrl)
                     .then((response) => response.blob())
@@ -50,7 +51,35 @@ const ShowProfile: React.FC = () => {
     }, []);
 
     const handleSendMessage = () => {
-        navigate('/messages');
+        const username = localStorage.getItem('usernameForShow');
+        const jwtToken = localStorage.getItem('jwt-token');
+
+        if (!username || !jwtToken) {
+            setErrorMessage('Ошибка: Не указан пользователь или токен');
+            return;
+        }
+
+        // Запрашиваем ID пользователя через новый API
+        fetch(`http://localhost:8080/users/id/${username}`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${jwtToken}`,
+            },
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                if (data.id) {
+                    // Сохраняем ID контакта в localStorage и переходим к сообщению
+                    localStorage.setItem('contactId', data.id.toString());
+                    navigate('/messages');
+                } else {
+                    setErrorMessage('Не удалось получить ID пользователя');
+                }
+            })
+            .catch((error) => {
+                setErrorMessage('Ошибка при получении ID пользователя');
+                console.error(error);
+            });
     };
 
     return (
@@ -79,9 +108,13 @@ const ShowProfile: React.FC = () => {
                             <p className="info-item"><strong>Год рождения:</strong> <span>{userInfo.yearOfBirth}</span></p>
                             <p className="info-item"><strong>О себе:</strong> <span>{userInfo.description}</span></p>
 
-                            {/* Кнопка внутри блока с информацией */}
                             <div className="message-button-container">
-                                <button className="message-button" onClick={handleSendMessage}>Написать сообщение</button>
+                                <button
+                                    className="message-button"
+                                    onClick={handleSendMessage}
+                                >
+                                    Написать сообщение
+                                </button>
                             </div>
                         </div>
                     </div>

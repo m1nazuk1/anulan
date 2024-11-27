@@ -54,7 +54,7 @@ const UserInfo: React.FC = () => {
             <div className="header">
                 <h1 className="brand-name">anulan</h1>
                 <nav className="navigation">
-                    <button onClick={() => navigate('/messages')}>Сообщения</button>
+                    <button onClick={() => navigate('/user-contacts')}>Сообщения</button>
                     <button onClick={() => navigate('/users')}>Пользователи</button>
                     <button onClick={() => navigate('/user-info')}>Моя страница</button>
                 </nav>
