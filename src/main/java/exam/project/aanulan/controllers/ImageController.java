@@ -1,3 +1,7 @@
+/**
+ * @author_Nizami_Alekperov
+ */
+
 package exam.project.aanulan.controllers;
 
 import exam.project.aanulan.models.Image;
@@ -47,8 +51,7 @@ public class ImageController {
 
         Person person = personDetailsService.loadPersonByUsername(((PersonDetails) authentication.getPrincipal()).getUsername());
 
-        // Устанавливаем изображение с ID = 1
-        person.setPreviewImageId(1); // ID изображения с ID = 1
+        person.setPreviewImageId(1);
         peopleRepository.save(person);
 
         return ResponseEntity.ok(Map.of("message", "Аватар успешно удален, установлен дефолтный аватар"));
@@ -70,17 +73,14 @@ public class ImageController {
                 .body(new InputStreamResource(new ByteArrayInputStream(image.getData())));
     }
 
-
     @GetMapping("/images/avatar/{username}")
     @ResponseBody
     public ResponseEntity<?> getAvatar(@PathVariable("username") String username) {
-        // Находим пользователя по имени
         Optional<Person> userOpt = peopleRepository.findByUsername(username);
         if (userOpt.isEmpty()) {
-            return ResponseEntity.notFound().build(); // Если пользователь не найден
+            return ResponseEntity.notFound().build();
         }
 
-        // Получаем ID изображения (previewImageId) пользователя
         String imageIdStr = String.valueOf(userOpt.get().getPreviewImageId());
 
         if (!imageIdStr.matches("\\d+")) {
@@ -89,15 +89,13 @@ public class ImageController {
 
         int imageId = Integer.parseInt(imageIdStr);
 
-        // Ищем изображение в репозитории
         Optional<Image> imageOpt = imagesRepository.findById(imageId);
         if (imageOpt.isEmpty()) {
-            return ResponseEntity.notFound().build(); // Если изображение не найдено
+            return ResponseEntity.notFound().build();
         }
 
         Image image = imageOpt.get();
 
-        // Возвращаем изображение
         return ResponseEntity.ok()
                 .header("fileName", image.getOriginalFileName())
                 .contentType(MediaType.valueOf(image.getContentType()))

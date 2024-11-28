@@ -1,11 +1,13 @@
+/**
+ * @author_Nizami_Alekperov
+ */
+
 package exam.project.aanulan.dto;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import org.springframework.web.multipart.MultipartFile;
-
-
 
 public class PersonDTO {
     @NotEmpty(message = "Логин не должен быть пустым")
@@ -19,7 +21,6 @@ public class PersonDTO {
     @Size(min = 2, max = 100, message = "Имя должно быть от 2 до 100 символов длиной")
     private String firstname;
 
-
     @NotEmpty(message = "Фамилия не должна быть пустым")
     @Size(min = 2, max = 100, message = "Фамилия должна быть от 2 до 100 символов длиной")
     private String lastname;
@@ -29,7 +30,6 @@ public class PersonDTO {
     private String description;
 
     private String password;
-
 
     public String getUsername() {
         return username;

@@ -1,3 +1,7 @@
+/**
+ * @author_Nizami_Alekperov
+ */
+
 package exam.project.aanulan.models;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
@@ -91,7 +95,9 @@ public class Person {
         this.images = images;
     }
 
-    public String getFirstname() {return firstname;}
+    public String getFirstname() {
+        return firstname;
+    }
 
     public void setFirstname(String firstname) {
         this.firstname = firstname;

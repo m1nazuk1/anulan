@@ -1,3 +1,7 @@
+/**
+ * @author_Nizami_Alekperov
+ */
+
 package exam.project.aanulan.controllers;
 
 import com.auth0.jwt.exceptions.JWTVerificationException;
@@ -24,12 +28,10 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.util.Map;
-
 
 @RestController
 @RequestMapping("/auth")
@@ -41,11 +43,8 @@ public class AuthController {
     private final JWTUtil jwtUtil;
     private final ModelMapper modelMapper;
     private final AuthenticationManager authenticationManager;
-
     private final PersonDetailsService personDetailsService;
-
     private final ImageService imageService;
-
 
     @Autowired
     public AuthController(RegistrationService registrationService, PersonValidator personValidator,
@@ -59,7 +58,6 @@ public class AuthController {
         this.imageService = imageService;
     }
 
-    //http://localhost:8080/auth/registration
     @PostMapping("/registration")
     public Map<String, String> performRegistration(@RequestBody @Valid PersonDTO personDTO, BindingResult bindingResult) throws IOException {
 
@@ -76,6 +74,7 @@ public class AuthController {
         String token = jwtUtil.generateToken(person.getUsername());
         return Map.of("jwt-token", token);
     }
+
     @Transactional
     @PutMapping("/forImage")
     public ResponseEntity<?> forImage(@RequestParam("image") MultipartFile image) throws IOException {
@@ -90,15 +89,6 @@ public class AuthController {
         return ResponseEntity.ok(Map.of("message", "данные пользователя успешно изменены"));
     }
 
-    //JSON:
-    // {
-    //      "username": "aaa",
-    //      "password": "aaa"
-    // }
-
-    //если мы хотим принять в контроллер этот ОБЪЕКТ , то нам нужен объект класса с совпадающими названиями полей
-
-
     @PostMapping("/login")
     public Map<String, String> performLogin(@RequestBody AuthenticationDTO authenticationDTO) {
         UsernamePasswordAuthenticationToken authInputToken =
@@ -112,16 +102,14 @@ public class AuthController {
         }
 
         String token = jwtUtil.generateToken(authenticationDTO.getUsername());
-        System.out.println(token);
         return Map.of("jwt-token", token);
     }
 
-    // Новый endpoint для получения текущего пользователя
     @GetMapping("/current-user")
     public ResponseEntity<?> getCurrentUser(HttpServletRequest request) {
         String authHeader = request.getHeader("Authorization");
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
-            String jwt = authHeader.substring(7); // Убираем префикс "Bearer "
+            String jwt = authHeader.substring(7);
             if (!jwt.isBlank()) {
                 try {
                     String username = jwtUtil.validateTokenAndRetrieveClaim(jwt);

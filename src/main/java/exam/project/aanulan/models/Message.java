@@ -1,3 +1,7 @@
+/**
+ * @author_Nizami_Alekperov
+ */
+
 package exam.project.aanulan.models;
 
 import javax.persistence.*;
@@ -9,10 +13,10 @@ public class Message {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
-
     @ManyToOne
     @JoinColumn(name = "sender_id")
     private Person sender;
+
     @Column(name = "sender_name")
     private String senderName;
 
@@ -21,6 +25,7 @@ public class Message {
     private Person receiver;
 
     private String content;
+
     @Column(name = "receiver_name")
     private String receiverName;
 
@@ -28,6 +33,7 @@ public class Message {
 
     private LocalDateTime sendTime;
 
+    // Getters and Setters
     public int getId() {
         return id;
     }
@@ -47,10 +53,10 @@ public class Message {
     public String getSenderName() {
         return senderName;
     }
+
     public String getReceiverName() {
         return receiverName;
     }
-
 
     public void setReceiverName(String receiverName) {
         this.receiverName = receiverName;
@@ -91,6 +97,4 @@ public class Message {
     public void setSendTime(LocalDateTime sendTime) {
         this.sendTime = sendTime;
     }
-
-
 }

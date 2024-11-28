@@ -1,3 +1,7 @@
+/**
+ * @author_Nizami_Alekperov
+ */
+
 package exam.project.aanulan.dto;
 
 import java.time.LocalDateTime;
@@ -8,8 +12,6 @@ public class MessageDto {
     private String content;
     private LocalDateTime sendTime;
 
-
-
     public MessageDto() {
     }
 
@@ -19,8 +21,6 @@ public class MessageDto {
         this.content = content;
         this.sendTime = sendTime;
     }
-
-
 
     public Integer getSenderId() {
         return senderId;

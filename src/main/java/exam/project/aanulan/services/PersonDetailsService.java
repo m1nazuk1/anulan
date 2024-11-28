@@ -1,3 +1,7 @@
+/**
+ * @author_Nizami_Alekperov
+ */
+
 package exam.project.aanulan.services;
 
 import exam.project.aanulan.models.Person;
@@ -9,9 +13,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-
 import java.util.Optional;
-
 
 @Service
 public class PersonDetailsService implements UserDetailsService {
@@ -32,7 +34,6 @@ public class PersonDetailsService implements UserDetailsService {
 
         return new PersonDetails(person.get());
     }
-
 
     public Person loadPersonByUsername(String s){
         Optional<Person> person = peopleRepository.findByUsername(s);

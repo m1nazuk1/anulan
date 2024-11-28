@@ -1,3 +1,7 @@
+/**
+ * @author_Nizami_Alekperov
+ */
+
 package exam.project.aanulan.config;
 
 import org.springframework.context.annotation.Configuration;
@@ -9,10 +13,10 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**")  // Применяем CORS ко всем путям
-                .allowedOrigins("http://localhost:3000")  // Разрешаем только запросы с фронтенда на этом порту
-                .allowedMethods("GET", "POST", "PUT", "DELETE")  // Разрешаем методы
+        registry.addMapping("/**")
+                .allowedOrigins("http://localhost:3000")
+                .allowedMethods("GET", "POST", "PUT", "DELETE")
                 .allowedHeaders("*")
-                .allowCredentials(true);// Разрешаем любые заголовки
+                .allowCredentials(true);
     }
 }

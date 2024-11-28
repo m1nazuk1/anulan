@@ -1,3 +1,7 @@
+/**
+ * @author_Nizami_Alekperov
+ */
+
 package exam.project.aanulan.controllers;
 
 import exam.project.aanulan.dto.PersonDTO;
@@ -22,24 +26,17 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.Map;
 
-
 @Controller
 public class ProfileController {
     private final AdminService adminService;
-
     private final PersonDetailsService personDetailsService;
     private final ModelMapper modelMapper;
-
     private final PersonValidator personValidator;
-
     private final PeopleRepository peopleRepository;
-
     private final PersonService personService;
-
     private final ImageService imageService;
 
     public static int contactId;
-
 
     @Autowired
     public ProfileController(AdminService adminService, PersonDetailsService personDetailsService, ModelMapper modelMapper, PersonValidator personValidator, PeopleRepository peopleRepository, PersonService personService, ImageService imageService) {
@@ -65,7 +62,6 @@ public class ProfileController {
             if (authentication == null || !authentication.isAuthenticated()) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Пользователь не аутентифицирован");
             }
-//            PersonDetails personDetails = (PersonDetails) authentication.getPrincipal();
             Person person = personDetailsService.loadPersonByUsername(((PersonDetails) authentication.getPrincipal()).getUsername());
 
             return ResponseEntity.ok(Map.of(
@@ -84,15 +80,12 @@ public class ProfileController {
         }
     }
 
-
     @GetMapping("/showProfile/{username}")
     @ResponseBody
-    public ResponseEntity<?> showProfile(@PathVariable("username") String username){
+    public ResponseEntity<?> showProfile(@PathVariable("username") String username) {
         try {
             Person person = personService.foundByUsername(username);
             contactId = person.getId();
-            System.out.println(person);
-            System.out.println(person.getFirstname());
             return ResponseEntity.ok(Map.of(
                     "firstname", person.getFirstname(),
                     "lastname", person.getLastname(),
@@ -101,36 +94,17 @@ public class ProfileController {
                     "username", person.getUsername(),
                     "password", person.getPassword(),
                     "imageId", person.getPreviewImageId()));
-        }catch (ClassCastException e) {
+        } catch (ClassCastException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Ошибка при обработке данных пользователя");
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Внутренняя ошибка сервера");
         }
-
-
     }
-
-
-//    @PostMapping("/path-to-upload")
-//    @CrossOrigin(origins = "http://localhost:3000")
-//    @ResponseBody
-//    public ResponseEntity<?> handleFileUpload(@RequestParam("image") MultipartFile file,
-//                                              @RequestParam("username") String name) throws IOException {
-//        if (file.isEmpty()) {
-//            return ResponseEntity.badRequest().body("Файл не был получен");
-//        }
-//
-//        imageService.enterImageId(name, file);
-//
-//
-//        return ResponseEntity.ok("Файл успешно загружен: " + file.getOriginalFilename());
-//    }
-
 
     @PostMapping("/editUserInfo")
     @ResponseBody
-    public ResponseEntity<?> editUserInfo(@RequestBody @Valid PersonDTO personDTO, BindingResult bindingResult){
+    public ResponseEntity<?> editUserInfo(@RequestBody @Valid PersonDTO personDTO, BindingResult bindingResult) {
         Person personOld = personService.foundByUsername(personDTO.getUsername());
 
         Person personNew = convertToPerson(personDTO);
@@ -141,14 +115,13 @@ public class ProfileController {
 
         personService.update(personOld.getUsername(), personNew);
 
-        return  ResponseEntity.ok(Map.of("message", "данные пользователя успешно изменены"));
-
+        return ResponseEntity.ok(Map.of("message", "данные пользователя успешно изменены"));
     }
-
 
     public Person convertToPerson(PersonDTO personDTO) {
         return this.modelMapper.map(personDTO, Person.class);
     }
+
     @GetMapping("/admin")
     public String adminPage() {
         adminService.doAdminStuff();

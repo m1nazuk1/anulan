@@ -1,3 +1,7 @@
+/**
+ * @author_Nizami_Alekperov
+ */
+
 package exam.project.aanulan.repositories;
 
 import exam.project.aanulan.models.Image;

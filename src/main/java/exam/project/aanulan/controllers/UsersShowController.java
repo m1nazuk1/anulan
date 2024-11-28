@@ -1,3 +1,7 @@
+/**
+ * @author_Nizami_Alekperov
+ */
+
 package exam.project.aanulan.controllers;
 
 import exam.project.aanulan.models.Person;
@@ -22,7 +26,6 @@ import java.util.Map;
 @RequestMapping("/users")
 public class UsersShowController {
     private final PersonService personService;
-
     private final PersonDetailsService personDetailsService;
 
     @Autowired
@@ -32,12 +35,12 @@ public class UsersShowController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<?> showAllUsers(){
+    public ResponseEntity<?> showAllUsers() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || !authentication.isAuthenticated()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Пользователь не аутентифицирован");
         }
-//            PersonDetails personDetails = (PersonDetails) authentication.getPrincipal();
+
         Person myPerson = personDetailsService.loadPersonByUsername(((PersonDetails) authentication.getPrincipal()).getUsername());
         List<Person> myAllUsers = personService.returnAllUsersExceptMe(myPerson.getUsername());
 
@@ -47,7 +50,6 @@ public class UsersShowController {
 
         return ResponseEntity.ok(Map.of(
                 "myUsers", myAllUsers));
-
     }
 
     // Новый метод для получения id пользователя по его username

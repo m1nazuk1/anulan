@@ -1,0 +1,77 @@
+/**
+ * @author-Nizami-Alekperov
+ */
+
+.back-buttonD {
+    background: none;
+    border: none;
+    padding: 5px;
+    cursor: pointer;
+    position: relative;
+    top: -270px;
+    left: -260px;
+    z-index: 10;
+    outline: none;
+    box-shadow: none;
+}
+
+.back-buttonD svg {
+    width: 30px;
+    height: 30px;
+    color: white;
+}
+
+.back-buttonD:hover {
+    opacity: 0.8;
+    background: none;
+    box-shadow: none;
+}
+
+.custom-file-label {
+    margin-left: 20%;
+    display: inline-block;
+    padding: 12px 20px;
+    font-size: 16px;
+    font-weight: 600;
+    color: white;
+    background-color: #97b9f3;
+    border-radius: 8px;
+    cursor: pointer;
+    text-align: center;
+    width: 50%;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.custom-file-label:hover {
+    background-color: #439bfa;
+    transform: translateY(-2px);
+}
+
+.custom-file-label:active {
+    transform: translateY(1px);
+}
+
+.file-input {
+    display: none;
+}
+
+.remove-photo-button {
+    background-color: red;
+    color: white;
+    font-size: 16px;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.remove-photo-button:hover {
+    background-color: darkred;
+    transform: translateY(-2px);
+}
+
+.remove-photo-button:active {
+    transform: translateY(1px);
+}

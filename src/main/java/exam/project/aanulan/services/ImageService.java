@@ -1,3 +1,7 @@
+/**
+ * @author_Nizami_Alekperov
+ */
+
 package exam.project.aanulan.services;
 
 import exam.project.aanulan.models.Image;
@@ -15,6 +19,7 @@ import java.io.IOException;
 public class ImageService {
     private final PeopleRepository peopleRepository;
     private final ImagesRepository imagesRepository;
+
     @Autowired
     public ImageService(PeopleRepository peopleRepository, ImagesRepository imagesRepository) {
         this.peopleRepository = peopleRepository;
@@ -36,15 +41,10 @@ public class ImageService {
             person.setPreviewImageId(image.getId());
             image.setPerson(person);
             imagesRepository.save(image);
-
         }
 
-
         peopleRepository.save(person);
-
-
     }
-
 
     public Image toImageEntity(MultipartFile file) throws IOException {
         Image image = new Image();

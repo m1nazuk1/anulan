@@ -1,3 +1,7 @@
+/**
+ * @author_Nizami_Alekperov
+ */
+
 package exam.project.aanulan.controllers;
 
 import exam.project.aanulan.dto.MessageDto;
@@ -35,16 +39,11 @@ public class MessageController {
         this.personDetailsService = personDetailsService;
     }
 
-
-    /**
-     * Получение списка пользователей, с которыми общался текущий пользователь.
-     */
     @GetMapping("/contacts")
     public ResponseEntity<?> getContacts() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Person currentUser = personDetailsService.loadPersonByUsername(((PersonDetails) authentication.getPrincipal()).getUsername());
 
-        // Ищем все сообщения, где текущий пользователь является отправителем или получателем
         List<Message> messages = messageRepository.findAllMessagesByUserId(currentUser.getId());
         List<Integer> contactIds = new ArrayList<>();
 
@@ -57,13 +56,10 @@ public class MessageController {
             }
         }
 
-        // Убираем дубли
         contactIds = contactIds.stream().distinct().collect(Collectors.toList());
 
-        // Получаем пользователей по списку ID
         List<Person> contacts = personRepository.findAllById(contactIds);
 
-        // Возвращаем список пользователей
         return ResponseEntity.ok(contacts);
     }
 
@@ -72,25 +68,20 @@ public class MessageController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Person currentUser = personDetailsService.loadPersonByUsername(((PersonDetails) authentication.getPrincipal()).getUsername());
 
-        // Находим сообщение по ID
         Message message = messageRepository.findById(messageId).orElse(null);
         if (message == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Сообщение не найдено");
         }
 
-        // Проверяем, что пользователь является отправителем или получателем
         if (message.getSender().getId() != currentUser.getId() && message.getReceiver().getId() != currentUser.getId()) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Нет прав на удаление этого сообщения");
         }
 
-        // Удаляем сообщение
         messageRepository.delete(message);
 
         return ResponseEntity.ok("Сообщение успешно удалено");
     }
-    /**
-     * Получение ID текущего пользователя и выбранного контакта.
-     */
+
     @GetMapping("/ids")
     public ResponseEntity<?> getUserAndContactIds() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -108,9 +99,6 @@ public class MessageController {
         return ResponseEntity.ok(ids);
     }
 
-    /**
-     * Отправка сообщения.
-     */
     @PostMapping("/send")
     public ResponseEntity<?> sendMessage(@RequestBody MessageDto messageDto) {
         Person sender = personRepository.findById(messageDto.getSenderId()).orElse(null);
@@ -133,9 +121,6 @@ public class MessageController {
         return ResponseEntity.ok("Message sent successfully");
     }
 
-    /**
-     * Получение переписки между текущим пользователем и выбранным контактом.
-     */
     @GetMapping("/{userId}/{contactId}")
     public ResponseEntity<?> getMessagesWithContact(@PathVariable int userId, @PathVariable int contactId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -145,7 +130,6 @@ public class MessageController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access denied");
         }
 
-        // Получаем сообщения
         List<Message> messages = messageRepository.findMessagesBetweenUsers(userId, contactId);
         return ResponseEntity.ok(messages);
     }

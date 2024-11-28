@@ -1,3 +1,7 @@
+/**
+ * @author_Nizami_Alekperov
+ */
+
 package exam.project.aanulan.services;
 
 import exam.project.aanulan.models.Image;
@@ -10,10 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
-import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
-
 
 @Service
 public class RegistrationService {
@@ -37,9 +38,6 @@ public class RegistrationService {
         person.setPreviewImageId(image.getId());
         person.setImages(Collections.singletonList(image));
 
-
         peopleRepository.save(person);
-
     }
-
 }

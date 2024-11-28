@@ -1,3 +1,7 @@
+/**
+ * @author_Nizami_Alekperov
+ */
+
 package exam.project.aanulan.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -15,27 +19,32 @@ public class Image {
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
+
     @Column(name = "name")
     private String name;
+
     @Column(name = "original_file_name")
     private String originalFileName;
+
     @Column(name = "size")
     private Long size;
+
     @Column(name = "content_type")
     private String contentType;
+
     @Column(name = "is_preview_image")
     private boolean isPreviewImage;
 
     @Column(name = "person_username")
     private String personUserName;
+
     private byte[] data;
+
     @ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
     @JsonBackReference
     private Person person;
 
-
-
-
+    // Constructors
     public Image(String name, String originalFileName, Long size, String contentType, boolean isPreviewImage, byte[] data, Person person) {
         this.name = name;
         this.originalFileName = originalFileName;
@@ -49,7 +58,7 @@ public class Image {
     public Image() {
     }
 
-
+    // Getters and Setters
     public String getPersonUserName() {
         return personUserName;
     }
