@@ -1,35 +1,39 @@
 /**
  * @author-Nizami-Alekperov
  */
-
-import React, { useState, useEffect, useRef, ChangeEvent, KeyboardEvent } from 'react';
+import React, { useState, useEffect, ChangeEvent, KeyboardEvent, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FiArrowLeft, FiSend } from 'react-icons/fi';
-import { FiTrash2 } from 'react-icons/fi';
+import { FiArrowLeft, FiSend, FiTrash2 } from 'react-icons/fi';
 import './Messages.css';
 import LoadingIndicator from '../../LoadingIndificator/LoadingInficator';
-
-interface Message {
-    id: number;
-    senderName: string;
-    receiverName: string;
-    content: string;
-    sendTime: string;
-    sender: {
-        id: number;
-        username: string;
-    };
-    isDeleting?: boolean;
-}
 
 const Messages: React.FC = () => {
     const [userId, setUserId] = useState<number | null>(null);
     const [contactId, setContactId] = useState<number | null>(null);
-    const [messages, setMessages] = useState<Message[]>([]);
+    const [messages, setMessages] = useState<any[]>([]);
     const [messageText, setMessageText] = useState<string>('');
     const [loading, setLoading] = useState<boolean>(true);
+    const [imageUrls, setImageUrls] = useState<any>({});
+    const [contactInfo, setContactInfo] = useState<any>(null);
     const messageListRef = useRef<HTMLDivElement | null>(null);
     const navigate = useNavigate();
+    let nms = "";
+    // @ts-ignore
+    nms =  localStorage.getItem("contactUsernames").toString();
+
+    const fetchContactImage = (username: string) => {
+        const imageUrl = `http://localhost:8080/images/${username}`;
+        fetch(imageUrl)
+            .then(response => response.blob())
+            .then(imageBlob => {
+                const imageObjectURL = URL.createObjectURL(imageBlob);
+                setImageUrls((prevUrls: any) => ({
+                    ...prevUrls,
+                    [username]: imageObjectURL,
+                }));
+            })
+            .catch(error => console.error('Ошибка загрузки изображения:', error));
+    };
 
     const fetchUserData = async () => {
         const jwtToken = localStorage.getItem('jwt-token');
@@ -83,9 +87,9 @@ const Messages: React.FC = () => {
     };
 
     const sendMessage = () => {
-        setLoading(false);
-
         if (!messageText.trim() || !userId || !contactId) return;
+
+        setLoading(false);
 
         const messageData = {
             senderId: userId,
@@ -141,12 +145,34 @@ const Messages: React.FC = () => {
     useEffect(() => {
         if (userId && contactId) {
             fetchMessages(userId, contactId);
+            fetchContactInfo(contactId);
         }
     }, [userId, contactId]);
 
     useEffect(() => {
         scrollToBottom();
     }, [messages]);
+
+    useEffect(() => {
+        if (contactId) {
+            const savedContactUsername = localStorage.getItem('contactUsername');
+            if (savedContactUsername) {
+                fetchContactImage(savedContactUsername);
+            }
+        }
+    }, [contactId]);
+
+    const fetchContactInfo = (contactId: number) => {
+        fetch(`http://localhost:8080/users/${contactId}`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('jwt-token')}`,
+            },
+        })
+            .then(response => response.json())
+            .then(data => setContactInfo(data))
+            .catch(error => console.error('Ошибка получения информации о пользователе:', error));
+    };
 
     const handleDeleteMessage = (messageId: number) => {
         fetch(`http://localhost:8080/messages/delete/${messageId}`, {
@@ -172,6 +198,17 @@ const Messages: React.FC = () => {
             .catch((error) => console.error('Ошибка:', error));
     };
 
+
+    console.log(localStorage.getItem("contactUsernames"))
+    const handleUserClick = () => {
+        localStorage.setItem('contactUsername', nms);
+        localStorage.setItem('usernameForShow', nms);
+
+
+
+        navigate('/showProfile');
+    };
+
     return (
         <div className="chat-wrapper">
             <div className="headerZ">
@@ -182,9 +219,17 @@ const Messages: React.FC = () => {
                     <button onClick={() => navigate('/user-info')}>Моя страница</button>
                 </nav>
             </div>
+
             <button className="back-button" onClick={() => navigate('/user-contacts')}>
                 <FiArrowLeft size={20} color="blue" />
             </button>
+            <div className="contact-cardS">
+
+                <div className="contact-card-detailsS">
+                    <h3>{contactInfo?.firstname} {contactInfo?.lastname}</h3>
+                    <button className="contact-card-buttonS" onClick={handleUserClick}>Перейти к профилю</button>
+                </div>
+            </div>
             <div className="chat-container">
                 {loading ? (
                     <LoadingIndicator />
@@ -198,7 +243,8 @@ const Messages: React.FC = () => {
                                     <div key={message.id || index}
                                          className={`message ${isCurrentUserSender ? 'sent' : 'received'} ${message.isDeleting ? 'delete' : ''}`}>
                                         <div className="message-content">{message.content}</div>
-                                        <div className="message-time">{new Date(message.sendTime).toLocaleString()}</div>
+                                        <div
+                                            className="message-time">{new Date(message.sendTime).toLocaleString()}</div>
 
                                         <div className="delete-button" onClick={() => handleDeleteMessage(message.id)}>
                                             <FiTrash2 size={16} color="red" />

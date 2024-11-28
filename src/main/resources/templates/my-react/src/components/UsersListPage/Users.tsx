@@ -69,6 +69,8 @@ const Users: React.FC = () => {
 
     const handleUserClick = (username: string) => {
         localStorage.setItem('usernameForShow', username);
+        localStorage.setItem('contactUsernames', username);
+
         navigate('/showProfile');
     };
 

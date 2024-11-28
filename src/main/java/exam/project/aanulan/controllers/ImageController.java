@@ -73,6 +73,7 @@ public class ImageController {
                 .body(new InputStreamResource(new ByteArrayInputStream(image.getData())));
     }
 
+
     @GetMapping("/images/avatar/{username}")
     @ResponseBody
     public ResponseEntity<?> getAvatar(@PathVariable("username") String username) {

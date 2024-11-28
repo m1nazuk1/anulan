@@ -1,3 +1,7 @@
+/**
+ * @author-Nizami-Alekperov
+ */
+
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './UserContacts.css';
@@ -6,7 +10,7 @@ import LoadingIndicator from '../../LoadingIndificator/LoadingInficator';
 const UserContacts: React.FC = () => {
     const [contacts, setContacts] = useState<any[]>([]);
     const [imageUrls, setImageUrls] = useState<any>({});
-    const [loading, setLoading] = useState<boolean>(true); // Статус загрузки
+    const [loading, setLoading] = useState<boolean>(true)
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -32,7 +36,6 @@ const UserContacts: React.FC = () => {
                 const data = await response.json();
                 setContacts(data);
 
-                // Fetch profile images for each contact
                 const imageFetchPromises = data.map((contact: any) => {
                     const imageUrl = `http://localhost:8080/images/${contact.username}`;
                     return fetch(imageUrl)
@@ -47,11 +50,11 @@ const UserContacts: React.FC = () => {
                         .catch(error => console.error('Ошибка загрузки изображения:', error));
                 });
 
-                await Promise.all(imageFetchPromises); // Ждем загрузки всех изображений
+                await Promise.all(imageFetchPromises);
             } catch (error) {
                 console.error('Ошибка:', error);
             } finally {
-                setLoading(false); // Отключаем индикатор загрузки
+                setLoading(false);
             }
         };
 
@@ -59,19 +62,19 @@ const UserContacts: React.FC = () => {
     }, [navigate]);
 
     const handleChatClick = (contactUsername: string, contactId: number) => {
-        // Сохраняем данные контакта в localStorage
         localStorage.setItem('contactUsername', contactUsername);
-        localStorage.setItem('contactId', contactId.toString()); // Добавляем contactId
+        localStorage.setItem('usernameForShow', contactUsername);
+        localStorage.setItem('contactUsernames', contactUsername);
+        localStorage.setItem('contactId', contactId.toString());
         navigate('/messages');
     };
 
     if (loading) {
-        return <LoadingIndicator />; // Отображение индикатора загрузки
+        return <LoadingIndicator />;
     }
 
     return (
         <div className="user-contacts-container">
-            {/* Шапка с навигационным меню */}
             <div className="headerS">
                 <h1 className="brand-name">anulan</h1>
                 <nav className="navigation">
@@ -93,7 +96,7 @@ const UserContacts: React.FC = () => {
                             >
                                 <div className="contact-image">
                                     <img
-                                        src={imageUrls[contact.username] || '/default-avatar.png'} // Default image if not loaded
+                                        src={imageUrls[contact.username] || '/default-avatar.png'}
                                         alt={`${contact.firstname} ${contact.lastname}`}
                                     />
                                 </div>

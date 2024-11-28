@@ -6,7 +6,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 40px;
+    margin-top: 20px;
 }
 
 .chat-container {
@@ -21,7 +21,7 @@
     overflow: hidden;
     border: 1px solid #e0e0e0;
     height: 75vh;
-    margin-top: 20px;
+    margin-top: 60px;
     margin-bottom: 20px;
     display: flex;
     flex-direction: column;
@@ -243,3 +243,43 @@ button {
 .send-button:hover {
     background-color: #1e88e5;
 }
+
+.contact-cardS {
+    position: absolute;
+    top: 130px;
+    right: 600px;
+    width: 250px;
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.contact-cardS:hover {
+    transform: scale(1.05);
+}
+
+.contact-card-detailsS h3 {
+    margin: 0;
+    font-size: 18px;
+    color: #333;
+}
+
+.contact-card-detailsS p {
+    margin: 5px 0;
+    color: #666;
+    font-size: 14px;
+}
+
+.contact-card-buttonS {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.contact-card-buttonS:hover {
+    background-color: #0056b3;
+}
+

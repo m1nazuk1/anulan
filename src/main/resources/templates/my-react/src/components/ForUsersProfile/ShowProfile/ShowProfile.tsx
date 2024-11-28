@@ -6,6 +6,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../UserInfo/UserInfo.css';
 import LoadingIndicator from '../../LoadingIndificator/LoadingInficator';
+import userContacts from "../../ForUsersChat/UserContacts/UserContacts";
 
 const ShowProfile: React.FC = () => {
     const [userInfo, setUserInfo] = useState<any>(null);
@@ -80,6 +81,8 @@ const ShowProfile: React.FC = () => {
             .then((data) => {
                 if (data.id) {
                     localStorage.setItem('contactId', data.id.toString());
+                    localStorage.setItem('usernameForShow', username);
+                    localStorage.setItem('contactUsernames', username);
                     navigate('/messages');
                 } else {
                     setErrorMessage('Не удалось получить ID пользователя');

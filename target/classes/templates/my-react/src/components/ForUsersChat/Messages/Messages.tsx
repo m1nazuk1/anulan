@@ -58,7 +58,7 @@ const Messages: React.FC = () => {
     };
 
     const fetchMessages = (userId: number, contactId: number) => {
-        setLoading(true);
+        setLoading(false);
         fetch(`http://localhost:8080/messages/${userId}/${contactId}`, {
             method: 'GET',
             headers: {
@@ -83,6 +83,8 @@ const Messages: React.FC = () => {
     };
 
     const sendMessage = () => {
+        setLoading(false);
+
         if (!messageText.trim() || !userId || !contactId) return;
 
         const messageData = {

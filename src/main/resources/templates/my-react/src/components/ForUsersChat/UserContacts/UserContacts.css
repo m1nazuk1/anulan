@@ -1,3 +1,7 @@
+/**
+ * @author-Nizami-Alekperov
+ */
+
 .headerS {
     text-align: center;
     padding: 20px;
@@ -33,36 +37,36 @@
 
 .contacts-cards {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Увеличенный минимальный размер */
-    gap: 25px; /* Больше пространства между карточками */
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 25px;
     padding: 20px;
 }
 
 .contact-card {
     display: flex;
     align-items: center;
-    padding: 15px; /* Увеличенное расстояние внутри карточки */
-    background-color: #f9f9f9; /* Нежный фон */
+    padding: 15px;
+    background-color: #f9f9f9;
     border: 1px solid #ddd;
-    border-radius: 10px; /* Более округлые края */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Легкая тень для объемности */
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     cursor: pointer;
-    transition: transform 0.2s, background-color 0.2s, box-shadow 0.2s; /* Анимация цвета, тени и масштаба */
+    transition: transform 0.2s, background-color 0.2s, box-shadow 0.2s;
 }
 
 
 .contact-card:hover {
-    transform: translateY(-5px); /* Легкое поднятие карточки */
-    background-color: #eef6ff; /* Смена фона на мягкий голубой */
-    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15); /* Увеличенная тень */
+    transform: translateY(-5px);
+    background-color: #eef6ff;
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
 }
 
 .contact-image img {
-    width: 60px; /* Немного больше изображения */
+    width: 60px;
     height: 60px;
     border-radius: 50%;
-    margin-right: 20px; /* Увеличенное расстояние между изображением и текстом */
-    border: 2px solid #007bff; /* Легкая рамка вокруг аватара */
+    margin-right: 20px;
+    border: 2px solid #007bff;
 }
 
 
@@ -71,7 +75,7 @@
 }
 
 .contact-name {
-    font-size: 18px; /* Более крупный шрифт для имени */
+    font-size: 18px;
     font-weight: 600;
     margin-bottom: 5px;
     color: #333;
@@ -79,6 +83,7 @@
 
 .last-message {
     font-size: 15px;
-    color: #666; /* Более мягкий цвет для последнего сообщения */
-    font-style: italic; /* Курсив для придания стиля */
+    color: #666;
+    font-style: italic;
 }
+
