@@ -37,6 +37,7 @@ const UserInfo: React.FC = () => {
                 setUserInfo(data);
                 localStorage.setItem("currentUserName", data.firstname);
                 const userImageUrl = `http://localhost:8080/images/${data.username}`;
+                console.log(userImageUrl);
                 setImageUrl(userImageUrl);
             } catch (error) {
                 console.error('Ошибка:', error);

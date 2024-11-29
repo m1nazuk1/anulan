@@ -46,6 +46,23 @@ public class ImageService {
         peopleRepository.save(person);
     }
 
+    public Image saveImage(MultipartFile file, Person person) throws IOException {
+        String originalFileName = file.getOriginalFilename();
+        Long size = file.getSize();
+        byte[] data = file.getBytes();
+
+        Image image = new Image();
+        image.setPersonUserName(person.getUsername());
+        image = toImageEntity(file);
+        image.setPreviewImage(true);
+        image.setOriginalFileName(originalFileName);
+        image.setSize(size);
+        image.setData(data);
+        image.setPerson(person);
+
+        return imagesRepository.save(image);
+    }
+
     public Image toImageEntity(MultipartFile file) throws IOException {
         Image image = new Image();
         image.setName(file.getName());

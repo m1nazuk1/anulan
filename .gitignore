@@ -7,7 +7,6 @@
 *.local
 *.DS_Store
 Thumbs.db
-.idea/
 *.iml
 out/
 node_modules/
@@ -17,3 +16,10 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 coverage/
+*.tar
+*.gz
+/target/
+/.idea/
+/*.iml
+/node_modules/
+/build/

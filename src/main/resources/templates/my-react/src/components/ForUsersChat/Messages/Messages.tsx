@@ -3,7 +3,7 @@
  */
 import React, { useState, useEffect, ChangeEvent, KeyboardEvent, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FiArrowLeft, FiSend, FiTrash2 } from 'react-icons/fi';
+import { FiArrowLeft, FiSend, FiTrash2, FiImage } from 'react-icons/fi';
 import './Messages.css';
 import LoadingIndicator from '../../LoadingIndificator/LoadingInficator';
 
@@ -16,7 +16,9 @@ const Messages: React.FC = () => {
     const [imageUrls, setImageUrls] = useState<any>({});
     const [contactInfo, setContactInfo] = useState<any>(null);
     const messageListRef = useRef<HTMLDivElement | null>(null);
+    const [mediaFile, setMediaFile] = useState<File | null>(null);
     const navigate = useNavigate();
+    const [imageUrl, setImageUrl] = useState<string>('');
     let nms = "";
     // @ts-ignore
     nms =  localStorage.getItem("contactUsernames").toString();
@@ -34,6 +36,9 @@ const Messages: React.FC = () => {
             })
             .catch(error => console.error('Ошибка загрузки изображения:', error));
     };
+
+    const jwtToken = localStorage.getItem('jwt-token');
+    console.log('JWT Token:', jwtToken);
 
     const fetchUserData = async () => {
         const jwtToken = localStorage.getItem('jwt-token');
@@ -62,7 +67,7 @@ const Messages: React.FC = () => {
     };
 
     const fetchMessages = (userId: number, contactId: number) => {
-        setLoading(false);
+        setLoading(true);
         fetch(`http://localhost:8080/messages/${userId}/${contactId}`, {
             method: 'GET',
             headers: {
@@ -76,9 +81,19 @@ const Messages: React.FC = () => {
                 return response.json();
             })
             .then((data) => {
-                setMessages(data);
+                // Проверяем каждое сообщение, если оно содержит mediaUrl, то обновляем imageUrls
+                const updatedMessages = data.map((message: any) => {
+                    if (message.mediaUrl) {
+                        // Если есть mediaUrl, создаем полное URL
+                        message.imageUrl = `${message.mediaUrl}`;
+                        console.log(message.imageUrl);
+                    }
+                    return message;
+                });
+
+                setMessages(updatedMessages);  // Сохраняем обновленные сообщения в состояние
                 setLoading(false);
-                scrollToBottom();
+                scrollToBottom();  // Прокручиваем вниз
             })
             .catch((error) => {
                 setLoading(false);
@@ -209,6 +224,53 @@ const Messages: React.FC = () => {
         navigate('/showProfile');
     };
 
+    const handleMediaChange = (event: ChangeEvent<HTMLInputElement>) => {
+        if (event.target.files) {
+            const file = event.target.files[0];
+            if (file) {
+                setMediaFile(file); // Сохраняем выбранный файл в состоянии
+
+                // Отправляем медиа-сообщение сразу после выбора файла
+                sendMediaMessage(file);
+            }
+        }
+    };
+
+// Функция для отправки медиа-сообщения
+    const sendMediaMessage = (mediaFile: File) => {
+        if (!mediaFile || !userId || !contactId) return;
+
+        setLoading(true);
+
+        const formData = new FormData();
+        formData.append('media', mediaFile); // Добавляем медиафайл
+        formData.append('receiverId', contactId.toString()); // Добавляем ID получателя
+
+        fetch('http://localhost:8080/messages/sendMedia', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('jwt-token')}`,
+            },
+            body: formData, // Отправляем форму с медиафайлом
+        })
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error('Ошибка отправки медиа');
+                }
+                return response.json();
+            })
+            .then((data) => {
+                setMediaFile(null); // Сбрасываем файл после отправки
+                fetchMessages(userId, contactId); // Загружаем сообщения
+            })
+            .catch((error) => {
+                setLoading(false);
+                console.error('Ошибка отправки медиа-сообщения:', error);
+            });
+    };
+
+
+
     return (
         <div className="chat-wrapper">
             <div className="headerZ">
@@ -242,12 +304,29 @@ const Messages: React.FC = () => {
                                 return (
                                     <div key={message.id || index}
                                          className={`message ${isCurrentUserSender ? 'sent' : 'received'} ${message.isDeleting ? 'delete' : ''}`}>
-                                        <div className="message-content">{message.content}</div>
+                                        <div className="message-content">
+                                            {message.content}
+
+                                            {/* Если это изображение */}
+                                            {message.imageUrl && (
+                                                <img id="sendImageId" src={message.imageUrl} alt="User"
+                                                     className="message-media"/>
+                                            )}
+
+                                            {/* Если это видео */}
+                                            {message.videoUrl && (
+                                                <video className="message-media" controls>
+                                                    <source src={message.videoUrl} type="video/mp4"/>
+                                                    Ваш браузер не поддерживает видео.
+                                                </video>
+                                            )}
+                                        </div>
+
                                         <div
                                             className="message-time">{new Date(message.sendTime).toLocaleString()}</div>
 
                                         <div className="delete-button" onClick={() => handleDeleteMessage(message.id)}>
-                                            <FiTrash2 size={16} color="red" />
+                                            <FiTrash2 size={16} color="red"/>
                                         </div>
                                     </div>
                                 );
@@ -261,8 +340,17 @@ const Messages: React.FC = () => {
                                 onKeyDown={handleKeyDown}
                                 placeholder="Введите сообщение"
                             />
+                            <label htmlFor="media-input" className="media-icon">
+                                <FiImage size={20} color="gray"/>
+                            </label>
+                            <input
+                                type="file"
+                                id="media-input"
+                                style={{display: 'none'}}
+                                onChange={handleMediaChange}
+                            />
                             <button className="send-button" onClick={sendMessage}>
-                                <FiSend size={40} color="white" />
+                                <FiSend size={40} color="white"/>
                             </button>
                         </div>
                     </>
@@ -272,4 +360,6 @@ const Messages: React.FC = () => {
     );
 };
 
+
 export default Messages;
+

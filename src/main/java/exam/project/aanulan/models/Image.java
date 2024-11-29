@@ -7,7 +7,6 @@ package exam.project.aanulan.models;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 
@@ -43,6 +42,7 @@ public class Image {
     @ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
     @JsonBackReference
     private Person person;
+
 
     // Constructors
     public Image(String name, String originalFileName, Long size, String contentType, boolean isPreviewImage, byte[] data, Person person) {

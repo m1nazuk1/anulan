@@ -33,7 +33,27 @@ public class Message {
 
     private LocalDateTime sendTime;
 
-    // Getters and Setters
+    @Column(name = "media_id")
+    private Integer mediaId;
+
+    private String mediaUrl;
+
+    public String getMediaUrl() {
+        return mediaUrl;
+    }
+
+    public void setMediaUrl(String mediaUrl) {
+        this.mediaUrl = mediaUrl;
+    }
+
+    public Integer getMediaId() {
+        return mediaId;
+    }
+
+    public void setMediaId(Integer mediaId) {
+        this.mediaId = mediaId;
+    }
+
     public int getId() {
         return id;
     }
